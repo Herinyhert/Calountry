@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { ValidRoles } from '../interfaces/valid-roles';
+import { UserRoles } from '../enums/user.roles';
 
 @Entity('user')
 export class User {
@@ -31,7 +31,7 @@ export class User {
   country: string;
 
   @Column('varchar')
-  gmt: string;
+  gmt_zone: string;
 
   @Column('varchar')
   phone_number: string;
@@ -44,8 +44,13 @@ export class User {
 
   @Column({
     type: 'enum',
-    enum: ValidRoles,
-    default: ValidRoles.user,
+    enum: UserRoles,
+    default: UserRoles.User,
   })
-  role: ValidRoles;
+  role: UserRoles;
+
+  @Column({
+    type: 'text',
+  })
+  technologies: string;
 }
