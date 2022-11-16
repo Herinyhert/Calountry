@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  //TODO: Import TypeOrmModule with environment variables
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({

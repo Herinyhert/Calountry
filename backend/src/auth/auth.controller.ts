@@ -3,9 +3,10 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  ParseUUIDPipe,
+  Put,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, UpdateUserDto } from './dto/index';
@@ -14,7 +15,7 @@ import { CreateUserDto, UpdateUserDto } from './dto/index';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
+  @Post('users/register')
   create(@Body() createAuthDto: CreateUserDto) {
     return this.authService.create(createAuthDto);
   }
@@ -29,13 +30,16 @@ export class AuthController {
     return this.authService.findOne(term);
   }
 
-  @Patch('users/:id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateUserDto) {
+  @Put('users/:id')
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateAuthDto: UpdateUserDto,
+  ) {
     return this.authService.update(id, updateAuthDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete('users/:id')
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.authService.remove(id);
   }
 }

@@ -1,32 +1,93 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+import { User } from './entities/user.entity';
 import { CreateUserDto, UpdateUserDto } from './dto/index';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class AuthService {
-  //TODO: Inject Repository
+  private readonly logger = new Logger('AuthService');
 
-  //TODO: Create logic, encrypt password, error handling
-  create(createAuthDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
+
+  async create(createUserDto: CreateUserDto) {
+    try {
+      const { password, ...userData } = createUserDto;
+      const user = this.userRepository.create({
+        ...userData,
+        password: bcrypt.hashSync(password, 10),
+      });
+      await this.userRepository.save(user);
+      delete user.password;
+      return user;
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
-  //TODO: Create logic, error handling
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    const users = await this.userRepository.find();
+    return users;
   }
 
-  //TODO: Create logic, id: string, find by term, error handling
-  findOne(term: string) {
-    return `This action returns a #${term} user`;
+  async findOne(term: string) {
+    let user: User;
+    if (isUUID(term)) {
+      user = await this.userRepository.findOneBy({ id: term });
+    } else {
+      const queryBuilder = this.userRepository.createQueryBuilder('use');
+      user = await queryBuilder
+        .where(
+          `UPPER(name) =:name or UPPER(last_name) =:last_name
+          or UPPER(user_name) =:user_name`,
+          {
+            name: term.toUpperCase(),
+            last_name: term.toUpperCase(),
+            user_name: term.toUpperCase(),
+          },
+        )
+        .getOne();
+    }
+
+    if (!user) {
+      throw new NotFoundException(`User with ${term} not found`);
+    }
+    return user;
   }
 
-  //TODO: Create logic, error handling
-  update(id: string, updateAuthDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.userRepository.preload({
+      id,
+      ...updateUserDto,
+    });
+    await this.userRepository.save(user);
+    return user;
   }
 
-  //TODO: Create logic, error handling
-  remove(id: string) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const user: User = await this.findOne(id);
+    await this.userRepository.remove(user);
+    return { message: `User with ${id} was removed` };
+  }
+
+  private handleDBExceptions(error: any): never {
+    if (error.code === '23505') {
+      throw new BadRequestException(error.detail);
+    }
+    this.logger.error(error);
+    throw new InternalServerErrorException(
+      'Unexpected error, check server logs',
+    );
   }
 }

@@ -33,7 +33,10 @@ export class User {
   @Column('varchar')
   gmt: string;
 
-  @Column('varchar')
+  @Column({
+    type: 'varchar',
+    default: null,
+  })
   phone_number: string;
 
   @Column({
