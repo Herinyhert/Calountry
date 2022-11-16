@@ -1,10 +1,7 @@
 import {
   IsEmail,
-<<<<<<< HEAD
-=======
   IsEnum,
   IsNotEmpty,
->>>>>>> 12708500921c21853c54b61de1a76f5252923f9b
   IsOptional,
   IsString,
   Matches,
