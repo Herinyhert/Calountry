@@ -12,7 +12,10 @@ export class User {
   @Column('varchar')
   last_name: string;
 
-  @Column('varchar')
+  @Column({
+    type: 'varchar',
+    unique: true,
+  })
   user_name: string;
 
   @Column({
