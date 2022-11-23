@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { UserRoles } from '../enums/user.roles';
 
 @Entity('user')
@@ -12,7 +18,10 @@ export class User {
   @Column('varchar')
   last_name: string;
 
-  @Column('varchar')
+  @Column({
+    type: 'varchar',
+    unique: true,
+  })
   user_name: string;
 
   @Column({
@@ -56,4 +65,15 @@ export class User {
     type: 'text',
   })
   technologies: string;
+
+  @BeforeInsert()
+  checkFieldBeforeInsert() {
+    this.email = this.email.toLowerCase().trim();
+    this.gmt_zone = this.gmt_zone.toUpperCase().trim();
+  }
+
+  @BeforeUpdate()
+  checkFieldBeforeUpdate() {
+    this.checkFieldBeforeInsert();
+  }
 }

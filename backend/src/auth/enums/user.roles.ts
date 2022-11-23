@@ -1,4 +1,3 @@
-
 ///For now, this is not definitive
 export enum UserRoles {
   Admin = 'Admin',
