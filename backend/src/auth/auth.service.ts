@@ -6,12 +6,14 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/index';
 import { isUUID } from 'class-validator';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +22,7 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -31,8 +34,10 @@ export class AuthService {
       });
       await this.userRepository.save(user);
       delete user.password;
-      return user;
-      //TODO: return the access JWT
+      return {
+        ...user,
+        token: this.getJwtToken({ id: user.id }),
+      };
     } catch (error) {
       this.handleDBExceptions(error);
     }
@@ -52,7 +57,7 @@ export class AuthService {
     }
     return {
       ...user,
-      //TODO: token: this.getJwtToken({ id: user.id }),
+      token: this.getJwtToken({ id: user.id }),
     };
   }
 
@@ -99,6 +104,11 @@ export class AuthService {
     const user: User = await this.findOne(id);
     await this.userRepository.remove(user);
     return { message: `User with ${id} was removed` };
+  }
+
+  private getJwtToken(payload: JwtPayload) {
+    const token = this.jwtService.sign(payload);
+    return token;
   }
 
   private handleDBExceptions(error: any): never {
