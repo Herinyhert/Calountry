@@ -43,16 +43,19 @@
                       <v-window-item :value="1">
                         <v-card-text>
                           <v-text-field
+                            v-model="name"
                             label="Name"
                             value=""
                             prepend-icon="account_circle"
                           ></v-text-field>
                           <v-text-field
+                            v-model="last_name"
                             label="Last name"
                             value=""
                             prepend-icon="account_circle"
                           ></v-text-field>
                           <v-text-field
+                            v-model="user_name"
                             label="Username"
                             value=""
                             prepend-icon="account_circle"
@@ -63,16 +66,19 @@
                       <v-window-item :value="2">
                         <v-card-text>
                           <v-text-field
+                            v-model="email"
                             label="Email"
-                            :type="email"
+                            type="email"
                             prepend-icon="email"
                           ></v-text-field>
                           <v-text-field
+                            v-model="password"
                             label="Password"
                             :type="showPass ? 'text' : 'password'"
                             prepend-icon="lock"
                           ></v-text-field>
                           <v-text-field
+                            v-model="password_confirm"
                             label="Confirm Password"
                             :type="showPass ? 'text' : 'password'"
                             prepend-icon="lock"
@@ -85,26 +91,64 @@
                       </v-window-item>
 
                       <v-window-item :value="3">
-                        <div class="pa-4 text-center">
-                          <v-img
-                            class="mb-4"
-                            contain
-                            height="128"
-                            src="https://cdn.vuetifyjs.com/images/logos/v.svg"
-                          ></v-img>
-                          <h3 class="text-h6 font-weight-light mb-2">
-                            Welcome to Vuetify
-                          </h3>
-                          <span class="text-caption grey--text"
-                            >Thanks for signing up!</span
-                          >
-                        </div>
+                        <v-card-text>
+                          <v-text-field
+                            v-model="country"
+                            label="Country"
+                            type="text"
+                            prepend-icon="public"
+                          ></v-text-field>
+                          <v-text-field
+                            v-model="gmt_zone"
+                            label="GMT Zone"
+                            type="text"
+                            prepend-icon="schedule"
+                          ></v-text-field>
+                          <v-text-field
+                            v-model="phone_number"
+                            label="Phone Number"
+                            type="text"
+                            prepend-icon="call"
+                          ></v-text-field>
+                          <v-text-field
+                            v-model="technologies"
+                            label="Technologies"
+                            type="text"
+                            placeholder="html, css, js"
+                            prepend-icon="code"
+                          ></v-text-field>
+                        </v-card-text>
                       </v-window-item>
                     </v-window>
                   </v-card-text>
-                  <div class="text-center mt-n5">
-                    <v-btn rounded color="teal accent-3" @click="step++" dark
-                      >Next</v-btn
+                  <div
+                    class="text-center mt-n5 d-flex px-5 justify-space-between align-content-end"
+                  >
+                    <v-btn
+                      rounded
+                      color="teal accent-3"
+                      v-if="step > 1"
+                      @click="step--"
+                      dark
+                    >
+                      <v-icon>arrow_back</v-icon>
+                    </v-btn>
+                    <v-btn
+                      rounded
+                      color="teal accent-3"
+                      v-if="step >= 1 && step != 3"
+                      @click="step++"
+                      dark
+                    >
+                      <v-icon>arrow_forward</v-icon></v-btn
+                    >
+                    <v-btn
+                      rounded
+                      color="teal accent-3"
+                      v-if="step == 3"
+                      @click="handleSignUp"
+                      dark
+                      >Sign up</v-btn
                     >
                   </div>
                 </v-col>
@@ -118,11 +162,46 @@
 </template>
 
 <script>
+import { register } from "@/services/auth/auth";
+
 export default {
   data: () => ({
-    step: 0,
+    step: 1,
     showPass: false,
+    name: "",
+    last_name: "",
+    user_name: "",
+    email: "",
+    password: "",
+    password_confirm: "",
+    country: "",
+    gmt_zone: "",
+    phone_number: "",
+    technologies: "",
+    errors: [],
   }),
+  methods: {
+    async handleSignUp() {
+      try {
+        await register(this.getUser());
+        this.$emit("sigin");
+      } catch (error) {
+        this.errors = error;
+      }
+    },
+    getUser() {
+      return {
+        name: this.name,
+        last_name: this.last_name,
+        user_name: this.user_name,
+        email: this.email,
+        password: this.password,
+        country: this.country,
+        gmt_zone: this.gmt_zone,
+        technologies: this.technologies,
+      };
+    },
+  },
 };
 </script>
 

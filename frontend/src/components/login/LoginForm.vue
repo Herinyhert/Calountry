@@ -9,7 +9,7 @@
                 <v-col cols="12" md="8">
                   <v-card-text class="mt-12">
                     <h1 class="text-center display-2 teal--text text--accent-3">
-                      Sign in to Diprella
+                      Sign in to Calountry
                     </h1>
                     <div class="text-center" mt-4>
                       <v-btn class="mx-2" fab color="black" outlined>
@@ -27,25 +27,40 @@
                     </h4>
                     <v-form>
                       <v-text-field
-                        label="Email"
-                        name="Email"
-                        prepend-icon="email"
+                        v-model="user_name"
+                        label="Username"
+                        name="Username"
+                        prepend-icon="person"
                         type="text"
                         color="teal accent-3"
+                        :error-messages="errorMessages"
                       />
                       <v-text-field
+                        v-model="password"
                         id="password"
                         label="Password"
                         name="Password"
                         prepend-icon="lock"
-                        type="password"
+                        :type="showPass ? 'text' : 'password'"
                         color="teal accent-3"
+                        :error-messages="errorMessages"
                       />
                     </v-form>
+                    <v-checkbox
+                      v-model="showPass"
+                      label="show password"
+                    ></v-checkbox>
                     <h3 class="text-center mt-3">Forget your password ?</h3>
                   </v-card-text>
                   <div class="text-center mt-3">
-                    <v-btn rounded color="teal accent-3" dark> SIGN IN </v-btn>
+                    <v-btn
+                      rounded
+                      color="teal accent-3"
+                      @click="handleLogin"
+                      dark
+                    >
+                      SIGN IN
+                    </v-btn>
                   </div>
                 </v-col>
                 <v-col cols="12" md="4" class="teal accent-3">
@@ -71,12 +86,32 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   data: () => ({
-    step: 1,
+    user_name: "",
+    password: "",
+    showPass: false,
+    errorMessages: "",
   }),
   props: {
     source: String,
+  },
+  methods: {
+    ...mapActions({
+      login: "auth/login",
+    }),
+    async handleLogin() {
+      const { user_name, password } = this;
+      try {
+        await this.login({ user_name, password });
+        this.$router.push("/home");
+      } catch (error) {
+        this.errorMessages = error;
+        setTimeout(() => (this.errorMessages = ""), 1800);
+      }
+    },
   },
 };
 </script>
