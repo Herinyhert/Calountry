@@ -27,6 +27,7 @@ export class AuthController {
     return this.authService.login(loginUserDto);
   }
 
+  // @Auth(UserRoles.Admin)
   @Get('users')
   findAll() {
     return this.authService.findAll();
