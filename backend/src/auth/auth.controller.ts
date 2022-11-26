@@ -7,6 +7,7 @@ import {
   Delete,
   ParseUUIDPipe,
   Put,
+  Patch,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/index';
@@ -38,8 +39,8 @@ export class AuthController {
     return this.authService.findOne(term);
   }
 
-  @Put('users/:id')
-  @Auth()
+  @Patch('users/:id')
+  // @Auth()
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateAuthDto: UpdateUserDto,
