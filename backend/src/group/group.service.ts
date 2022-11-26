@@ -25,7 +25,7 @@ export class GroupService {
     const { users = [], ...rest } = createGroupDto;
 
     const ids = await this.authService.findByIds(users);
-    const saveGroup = await this.groupRepository.create({
+    const saveGroup = this.groupRepository.create({
       ...rest,
       users: ids,
     });
