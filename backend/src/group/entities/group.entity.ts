@@ -12,13 +12,13 @@ export class Group {
     @CreateDateColumn()
     created_at: Date;
 
-    @Column('date')
+    @Column('date', {nullable: true})
     start_date?: Date;
 
-    @Column('date')
+    @Column('date', {nullable: true})
     end_date?: Date;
 
     @ManyToMany(() => User)
     @JoinTable()
-    users: User[]
+    users?: User[]
 }

@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/index';
@@ -24,6 +24,10 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
   ) {}
+  
+  async findByIds(ids: Array<string>){
+    return await this.userRepository.find({where: {id: In(ids)}});
+  }
 
   async create(createUserDto: CreateUserDto) {
     try {
