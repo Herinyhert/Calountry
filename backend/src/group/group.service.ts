@@ -1,4 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
+
+import { BadRequestException, Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { Repository } from 'typeorm';
@@ -7,8 +8,10 @@ import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { Group } from './entities/group.entity';
 
+
 @Injectable()
 export class GroupService {
+
   constructor(
     @InjectRepository(Group)
     private readonly groupRepository: Repository<Group>,
@@ -33,8 +36,9 @@ export class GroupService {
     
   }
 
-  findAll() {
-    return `This action returns all group`;
+  async findAll() {
+    const groups = await this.groupRepository.find();
+    return groups;
   }
 
   findOne(id: number) {
@@ -48,4 +52,14 @@ export class GroupService {
   remove(id: number) {
     return `This action removes a #${id} group`;
   }
+
+  // private handleDBExceptions(error: any): never {
+  //   if (error.code === '23505') {
+  //     throw new BadRequestException(error.detail);
+  //   }
+  //   this.logger.error(error);
+  //   throw new InternalServerErrorException(
+  //     'Unexpected error, check server logs',
+  //   );
+  // }
 }

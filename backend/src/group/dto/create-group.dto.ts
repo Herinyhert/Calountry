@@ -1,3 +1,4 @@
+
 import { IsArray, IsDate, IsNotEmpty, IsOptional, IsUUID, MaxLength } from "class-validator";
 
 export class CreateGroupDto {
@@ -15,7 +16,7 @@ export class CreateGroupDto {
     end_date?: Date
 
     @IsUUID(undefined, {each: true})
-    
+
     users?: string[];
 
 }
