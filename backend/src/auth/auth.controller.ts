@@ -13,7 +13,10 @@ import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/index';
 import { Auth } from './decorators';
 import { UserRoles } from './enums/user.roles';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Authentication and user management')
+@ApiBearerAuth("Bearer")
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
