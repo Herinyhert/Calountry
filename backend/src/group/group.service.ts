@@ -1,15 +1,36 @@
-import { Injectable } from '@nestjs/common';
-import { CreateGroupDto } from './dto/create-group.dto';
-import { UpdateGroupDto } from './dto/update-group.dto';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateGroupDto, UpdateGroupDto } from './dto/index';
+import { Group } from './entities/group.entity';
 
 @Injectable()
 export class GroupService {
-  create(createGroupDto: CreateGroupDto) {
-    return 'This action adds a new group';
+  private readonly logger = new Logger('GroupService');
+
+  constructor(
+    @InjectRepository(Group)
+    private readonly groupRepository: Repository<Group>,
+  ) {}
+
+  async create(createGroupDto: CreateGroupDto) {
+    try {
+      const group = this.groupRepository.create(createGroupDto);
+      await this.groupRepository.save(group);
+      return group;
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
-  findAll() {
-    return `This action returns all group`;
+  async findAll() {
+    const groups = await this.groupRepository.find();
+    return groups;
   }
 
   findOne(id: number) {
@@ -22,5 +43,15 @@ export class GroupService {
 
   remove(id: number) {
     return `This action removes a #${id} group`;
+  }
+
+  private handleDBExceptions(error: any): never {
+    if (error.code === '23505') {
+      throw new BadRequestException(error.detail);
+    }
+    this.logger.error(error);
+    throw new InternalServerErrorException(
+      'Unexpected error, check server logs',
+    );
   }
 }
