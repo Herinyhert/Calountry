@@ -7,20 +7,6 @@ import { SecuritySchemeObject } from '@nestjs/swagger/dist/interfaces/open-api-s
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('/api');
-  const config = new DocumentBuilder()
-    .setDescription('Calountry backend')
-    .setVersion('1.0')
-    .addBearerAuth(
-      {
-        type: 'http',
-        schema: 'Bearer',
-        bearerFormat: 'Token',
-      } as SecuritySchemeObject,
-      'Bearer',
-    )
-    .build();
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, document);
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

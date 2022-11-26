@@ -6,7 +6,7 @@
           <v-col cols="12" sm="8" md="8">
             <v-card class="elevation-12">
               <v-row>
-                <v-col cols="12" md="4" class="teal accent-3">
+                <v-col cols="12" md="4" class="blue accent-3">
                   <v-card-text class="white--text me-12">
                     <h1 class="text-center display-1">Welcome Back!</h1>
                     <h5 class="text-center">
@@ -22,7 +22,7 @@
                 </v-col>
                 <v-col cols="12" md="8">
                   <v-card-text class="mt-12">
-                    <h1 class="text-center display-2 teal--text text--accent-3">
+                    <h1 class="text-center display-2 blue--text text--accent-3">
                       Create Account
                     </h1>
                     <div class="text-center mt-4">
@@ -126,7 +126,7 @@
                   >
                     <v-btn
                       rounded
-                      color="teal accent-3"
+                      color="blue accent-3"
                       v-if="step > 1"
                       @click="step--"
                       dark
@@ -135,7 +135,7 @@
                     </v-btn>
                     <v-btn
                       rounded
-                      color="teal accent-3"
+                      color="blue accent-3"
                       v-if="step >= 1 && step != 3"
                       @click="step++"
                       dark
@@ -144,7 +144,7 @@
                     >
                     <v-btn
                       rounded
-                      color="teal accent-3"
+                      color="blue accent-3"
                       v-if="step == 3"
                       @click="handleSignUp"
                       dark
