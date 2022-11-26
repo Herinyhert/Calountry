@@ -1,5 +1,6 @@
 
 import { ApiProperty } from "@nestjs/swagger";
+import { Type } from "class-transformer";
 import { IsArray, IsDate, IsNotEmpty, IsOptional, IsUUID, MaxLength } from "class-validator";
 
 export class CreateGroupDto {
@@ -11,11 +12,13 @@ export class CreateGroupDto {
 
     @ApiProperty()
     @IsDate()
+    @Type(() => Date)
     @IsOptional()
     start_date?: Date;
 
     @ApiProperty()
     @IsDate()
+    @Type(() => Date)
     @IsOptional()
     end_date?: Date
 
