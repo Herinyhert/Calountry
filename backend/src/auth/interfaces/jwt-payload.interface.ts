@@ -1,6 +1,6 @@
 export interface JwtPayload {
   id: string;
-  name: string;
+  /* name: string;
   last_name: string;
   user_name: string;
   email: string;
@@ -9,6 +9,6 @@ export interface JwtPayload {
   gmt_zone: string;
   phone_number: string;
   role: string;
-  technologies: string;
+  technologies: string; */
   //TODO: añadir todo lo que quieran grabar
 }

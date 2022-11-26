@@ -6,7 +6,6 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
-  Put,
   Patch,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -16,7 +15,7 @@ import { UserRoles } from './enums/user.roles';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Authentication and user management')
-@ApiBearerAuth("Bearer")
+@ApiBearerAuth('Bearer')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

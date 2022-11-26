@@ -14,6 +14,7 @@ import { User } from './entities/user.entity';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/index';
 import { isUUID } from 'class-validator';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { GetUser } from './decorators';
 
 @Injectable()
 export class AuthService {
@@ -39,7 +40,8 @@ export class AuthService {
       await this.userRepository.save(user);
       delete user.password && delete user.isActive;
       return {
-        token: this.getJwtToken({ ...user }),
+        ...user,
+        token: this.getJwtToken({ id: user.id }),
       };
     } catch (error) {
       this.handleDBExceptions(error);
@@ -71,7 +73,8 @@ export class AuthService {
     }
     delete user.password;
     return {
-      token: this.getJwtToken({ ...user }),
+      ...user,
+      token: this.getJwtToken({ id: user.id }),
     };
   }
 
