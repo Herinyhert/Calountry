@@ -1,13 +1,15 @@
+import { Note } from '../../note/entities/note.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserRoles } from '../enums/user.roles';
 
-@Entity('user')
+@Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -65,6 +67,9 @@ export class User {
     type: 'text',
   })
   technologies: string;
+
+  @OneToMany(() => Note, (userNote) => userNote.user)
+  notes?: Note[]
 
   @BeforeInsert()
   checkFieldBeforeInsert() {

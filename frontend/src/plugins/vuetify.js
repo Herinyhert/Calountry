@@ -9,4 +9,11 @@ export default new Vuetify({
   icons: {
     iconfont: "mdi" || "fa",
   },
+  theme: {
+    themes: {
+      dark: {
+        background: "#f4f5f9",
+      },
+    },
+  },
 });

@@ -8,12 +8,13 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/index';
 import { isUUID } from 'class-validator';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { GetUser } from './decorators';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +26,10 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  async findByIds(ids: Array<string>) {
+    return await this.userRepository.find({ where: { id: In(ids) } });
+  }
+
   async create(createUserDto: CreateUserDto) {
     try {
       const { password, ...userData } = createUserDto;
@@ -33,7 +38,7 @@ export class AuthService {
         password: bcrypt.hashSync(password, 10),
       });
       await this.userRepository.save(user);
-      delete user.password;
+      delete user.password && delete user.isActive;
       return {
         ...user,
         token: this.getJwtToken({ id: user.id }),
@@ -47,7 +52,18 @@ export class AuthService {
     const { password, user_name } = loginUserDto;
     const user = await this.userRepository.findOne({
       where: { user_name },
-      select: { user_name: true, password: true, id: true, role: true },
+      select: {
+        id: true,
+        name: true,
+        last_name: true,
+        user_name: true,
+        email: true,
+        password: true,
+        country: true,
+        phone_number: true,
+        role: true,
+        technologies: true,
+      },
     });
     if (!user) {
       throw new UnauthorizedException('Credentials are not valid (user_name)');
@@ -55,6 +71,7 @@ export class AuthService {
     if (!bcrypt.compareSync(password, user.password)) {
       throw new UnauthorizedException('Credentials are not valid (password)');
     }
+    delete user.password;
     return {
       ...user,
       token: this.getJwtToken({ id: user.id }),
