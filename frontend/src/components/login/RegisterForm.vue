@@ -75,7 +75,10 @@
                             v-model="password"
                             label="Password"
                             :type="showPass ? 'text' : 'password'"
+                            @blur="isValidpassword"
+                            @focus="errors.password.message = ''"
                             prepend-icon="lock"
+                            :error-messages="errors.password.message"
                           ></v-text-field>
                           <v-text-field
                             v-model="password_confirm"
@@ -137,7 +140,7 @@
                       rounded
                       color="teal accent-3"
                       v-if="step >= 1 && step != 3"
-                      @click="step++"
+                      @click="nextStep"
                       dark
                     >
                       <v-icon>arrow_forward</v-icon></v-btn
@@ -178,7 +181,13 @@ export default {
     gmt_zone: "",
     phone_number: "",
     technologies: "",
-    errors: [],
+    errors: {
+      password: {
+        value:
+          "The password must have a Uppercase, lowercase letter and a number'",
+        message: "",
+      },
+    },
   }),
   methods: {
     async handleSignUp() {
@@ -200,6 +209,40 @@ export default {
         gmt_zone: this.gmt_zone,
         technologies: this.technologies,
       };
+    },
+    nextStep() {
+      if (this.firsStepValidation() == false) {
+        return;
+      }
+      if (this.step == 2 && this.secondStepValidation() == false) {
+        return;
+      }
+
+      this.step++;
+    },
+    firsStepValidation() {
+      if (this.user_name.length < 3) return false;
+      if (this.name.length < 3) return false;
+      if (this.last_name.length < 3) return false;
+      return true;
+    },
+    secondStepValidation() {
+      if (this.email.includes("@") == false) return false;
+      if (this.password != this.password_confirm) return false;
+
+      return true;
+    },
+    isValidpassword() {
+      console.log("incalis");
+      if (
+        !(
+          this.password.match(
+            /(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
+          ) || []
+        ).length
+      ) {
+        this.errors.password.message = this.errors.password.value;
+      }
     },
   },
 };
