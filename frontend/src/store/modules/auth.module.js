@@ -1,12 +1,12 @@
+import { getProfile } from "@/helpers/localStorage";
 import { login, register } from "@/services/auth/auth";
 import { mutation } from "../constants/mutations";
+import { setProfile } from "./../../helpers/localStorage";
 
 const auth = {
   namespaced: true,
   state: () => ({
-    profile: {
-      token: "",
-    },
+    profile: getProfile() || {},
   }),
   getters: {},
   mutations: {
@@ -22,6 +22,8 @@ const auth = {
     async login({ commit }, payload) {
       const response = await login(payload);
       if (!response.data) throw "Athentication failed";
+
+      setProfile(response.data);
       commit(mutation.SET_PROFILE, response.data);
     },
   },

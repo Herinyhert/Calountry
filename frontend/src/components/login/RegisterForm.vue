@@ -249,7 +249,6 @@ export default {
     thirdStepValidation() {
       if (this.country.length < 3) return false;
       if (this.gmt_zone.length < 3) return false;
-      if (this.phone_number.length < 3) return false;
       if (this.technologies.length < 3) return false;
       return true;
     },

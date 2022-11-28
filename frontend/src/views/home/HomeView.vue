@@ -28,8 +28,12 @@ import SiderBar from "../../components/home/SiderBar.vue";
 import ContacT from "../../components/home/ContacT.vue";
 import AgendA from "../../components/home/AgendA.vue";
 import GrouP from "@/components/home/GrouP.vue";
+import { mapState } from "vuex";
 export default {
   name: "HomeView",
+  computed: {
+    ...mapState(["auth"]),
+  },
   components: { SiderBar, NavBar, ContacT, AgendA, GrouP },
 };
 </script>

@@ -15,54 +15,46 @@
     </v-toolbar>
     <v-list class="mt-n6" color="transparent" dense>
       <v-list-item v-for="chat in chats" :key="chat.title">
-        <v-list-item-avatar tile>
-          <v-img :src="chat.img" />
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-btn>
-            <v-list-item-content>
-              <router-link to="/detail">
+        <router-link :to="'/detail/' + chat.id">
+          <v-list-item-avatar tile>
+            <v-img :src="chat.img" />
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-btn>
+              <v-list-item-content>
                 <v-list-item-title
-                  v-text="chat.title"
+                  v-text="chat.name"
                   class="black--text"
                 ></v-list-item-title>
-              </router-link>
-              <v-list-item-subtitle
-                v-text="chat.subtitle"
-                class="grey--text"
-              ></v-list-item-subtitle>
-            </v-list-item-content>
-          </v-btn>
-        </v-list-item-content>
+                <v-list-item-subtitle
+                  v-text="chat.id"
+                  class="grey--text"
+                ></v-list-item-subtitle>
+              </v-list-item-content>
+            </v-btn>
+          </v-list-item-content>
+        </router-link>
       </v-list-item>
     </v-list>
   </v-card>
 </template>
 
 <script>
+import { getMyGroups } from "@/services/group/group";
+
 export default {
   data: () => ({
-    chats: [
-      {
-        img: "##",
-        subtitle: "C8-39-T-Vue",
-        title: "Calountry",
-      },
-      {
-        img: "##",
-        subtitle: "React Redux - JS",
-        title: "CompusTore",
-      },
-      {
-        img: "##",
-        subtitle: "TL-Team-C8",
-        title: "Team",
-      },
-    ],
+    chats: [],
     picker: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
       .substr(0, 10),
   }),
+
+  mounted() {
+    getMyGroups().then((res) => {
+      this.chats = res;
+    });
+  },
 };
 </script>
 
