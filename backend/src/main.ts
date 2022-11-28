@@ -8,6 +8,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
   app.setGlobalPrefix('/api');
+<<<<<<< HEAD
+  app.enableCors();
+=======
   const config = new DocumentBuilder()
     .setDescription('Calountry backend')
     .setVersion('1.0')
@@ -22,6 +25,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+>>>>>>> 43339091d4b8c79a26c00f38fe0811e954c35748
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
