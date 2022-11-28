@@ -31,10 +31,15 @@ export class GroupController {
     return this.groupService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.groupService.findOne(+id);
+  @Get('group-details/:id')
+  findGroupWithMembers(@Param('id') id: string){
+    return this.groupService.getGroupWithMembers(id);
   }
+
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.groupService.findOne(+id);
+  // }
 
   @Put(':id')
   @Auth(UserRoles.Admin)

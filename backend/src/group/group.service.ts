@@ -37,6 +37,14 @@ export class GroupService {
     return groups;
   }
 
+  async getGroupWithMembers(id: string){
+    const group = await this.groupRepository.find({
+      relations: ['users'],
+      where: {id: id}
+    })
+    return group;
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} group`;
   }
