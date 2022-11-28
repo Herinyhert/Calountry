@@ -22,14 +22,4 @@
   </v-app>
 </template>
 
-<script>
-import NavBar from "@/components/home/NavBar.vue";
-import SiderBar from "../../components/home/SiderBar.vue";
-import ContacT from "../../components/home/ContacT.vue";
-import AgendA from "../../components/home/AgendA.vue";
-import GrouP from "@/components/home/GrouP.vue";
-export default {
-  name: "HomeView",
-  components: { SiderBar, NavBar, ContacT, AgendA, GrouP },
-};
-</script>
+<script></script>

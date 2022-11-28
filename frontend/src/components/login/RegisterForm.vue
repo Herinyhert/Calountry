@@ -85,6 +85,8 @@
                             label="Confirm Password"
                             :type="showPass ? 'text' : 'password'"
                             prepend-icon="lock"
+                            @focus="errors.password_confirm.message = ''"
+                            :error-messages="errors.password_confirm.message"
                           ></v-text-field>
                           <v-checkbox
                             v-model="showPass"
@@ -187,10 +189,15 @@ export default {
           "The password must have a Uppercase, lowercase letter and a number'",
         message: "",
       },
+      password_confirm: {
+        value: "The passwords needs to be equals",
+        message: "",
+      },
     },
   }),
   methods: {
     async handleSignUp() {
+      if (this.checkValidations() == false) return;
       try {
         await register(this.getUser());
         this.$emit("sigin");
@@ -210,15 +217,14 @@ export default {
         technologies: this.technologies,
       };
     },
+    checkValidations() {
+      if (this.step == 1 && this.firsStepValidation() == false) return false;
+      if (this.step == 2 && this.secondStepValidation() == false) return false;
+      if (this.step == 3 && this.thirdStepValidation() == false) return false;
+      return true;
+    },
     nextStep() {
-      if (this.firsStepValidation() == false) {
-        return;
-      }
-      if (this.step == 2 && this.secondStepValidation() == false) {
-        return;
-      }
-
-      this.step++;
+      if (this.checkValidations()) this.step++;
     },
     firsStepValidation() {
       if (this.user_name.length < 3) return false;
@@ -227,22 +233,34 @@ export default {
       return true;
     },
     secondStepValidation() {
-      if (this.email.includes("@") == false) return false;
-      if (this.password != this.password_confirm) return false;
+      let bol = true;
+      if (this.email.includes("@") == false) bol = false;
+      if (this.isValidpassword() == false) bol = false;
 
+      if (this.password !== this.password_confirm) {
+        this.errors.password_confirm.message =
+          this.errors.password_confirm.value;
+        bol = false;
+      }
+
+      return bol;
+    },
+
+    thirdStepValidation() {
+      if (this.country.length < 3) return false;
+      if (this.gmt_zone.length < 3) return false;
+      if (this.phone_number.length < 3) return false;
+      if (this.technologies.length < 3) return false;
       return true;
     },
     isValidpassword() {
-      console.log("incalis");
-      if (
-        !(
-          this.password.match(
-            /(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
-          ) || []
-        ).length
-      ) {
+      const regex = /(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
+      if (!(this.password.match(regex) || []).length) {
         this.errors.password.message = this.errors.password.value;
+
+        return false;
       }
+      return true;
     },
   },
 };
