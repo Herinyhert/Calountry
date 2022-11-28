@@ -28,6 +28,14 @@ const routes = [
       return import("../views/LoginView.vue");
     },
   },
+  {
+    path: "/detail",
+    name: "groupDetail",
+
+    component: function () {
+      return import("../components/groups/DetailGroup.vue");
+    },
+  },
 ];
 
 const router = new VueRouter({
