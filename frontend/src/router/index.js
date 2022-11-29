@@ -11,10 +11,17 @@ const routes = [
     component: HomeView,
     children: [
       {
-        path: "group",
-        name: "group",
+        path: "/",
+        name: "user",
         component: function () {
-          return import("../views/LoginView.vue");
+          return import("../views/home/pages/UserView.vue");
+        },
+      },
+      {
+        path: "admin",
+        name: "user",
+        component: function () {
+          return import("../views/home/pages/AdminView.vue");
         },
       },
     ],
