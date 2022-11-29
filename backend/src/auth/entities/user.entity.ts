@@ -4,10 +4,13 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserRoles } from '../enums/user.roles';
+import { Group } from './../../group/entities/group.entity';
 
 @Entity()
 export class User {
@@ -69,7 +72,11 @@ export class User {
   technologies: string;
 
   @OneToMany(() => Note, (userNote) => userNote.user)
-  notes?: Note[]
+  notes?: Note[];
+
+  @ManyToMany(() => Group)
+  @JoinTable()
+  groups?: Group[];
 
   @BeforeInsert()
   checkFieldBeforeInsert() {
