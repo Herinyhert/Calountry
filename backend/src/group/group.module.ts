@@ -6,13 +6,10 @@ import { Group } from './entities/group.entity';
 
 import { AuthModule } from 'src/auth/auth.module';
 
-
 @Module({
   controllers: [GroupController],
   providers: [GroupService],
-
-  imports: [TypeOrmModule.forFeature([Group]), AuthModule]
-
-
+  imports: [TypeOrmModule.forFeature([Group]), AuthModule],
+  exports: [GroupModule],
 })
 export class GroupModule {}
