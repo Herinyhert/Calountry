@@ -112,9 +112,7 @@ export class AuthService {
       relations: { groups: true },
       where: { id: id },
     });
-    return {
-      groups: user.groups,
-    };
+    return user.groups;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
