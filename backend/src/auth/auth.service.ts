@@ -108,6 +108,7 @@ export class AuthService {
   }
 
   async getGroupsByUser(id: string) {
+<<<<<<< HEAD
     try {
       const { groups } = await this.userRepository.findOne({
         relations: { groups: true },
@@ -117,6 +118,13 @@ export class AuthService {
     } catch (error) {
       this.handleDBExceptions(error);
     }
+=======
+    const user = await this.userRepository.findOne({
+      relations: { groups: true },
+      where: { id: id },
+    });
+    return user.groups;
+>>>>>>> cb9e505dc9ffa6ae4c1f1f2f1d25c9961d71c7e6
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
