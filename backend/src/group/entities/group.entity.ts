@@ -13,7 +13,7 @@ export class Group {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('varchar')
+  @Column('varchar', { unique: true })
   name: string;
 
   @CreateDateColumn()
