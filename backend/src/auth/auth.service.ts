@@ -14,7 +14,6 @@ import { User } from './entities/user.entity';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/index';
 import { isUUID } from 'class-validator';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
-import { GetUser } from './decorators';
 
 @Injectable()
 export class AuthService {
@@ -106,6 +105,18 @@ export class AuthService {
       throw new NotFoundException(`User with ${term} not found`);
     }
     return user;
+  }
+
+  async getGroupsByUser(id: string) {
+    try {
+      const { groups } = await this.userRepository.findOne({
+        relations: { groups: true },
+        where: { id: id },
+      });
+      return groups;
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {

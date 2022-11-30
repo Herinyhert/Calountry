@@ -7,15 +7,14 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GroupService } from './group.service';
-import { CreateGroupDto } from './dto/create-group.dto';
-import { UpdateGroupDto } from './dto/update-group.dto';
+import { CreateGroupDto, UpdateGroupDto } from './dto/index';
 import { Auth } from 'src/auth/decorators';
 import { UserRoles } from '../auth/enums/user.roles';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Groups')
-@ApiBearerAuth("Bearer")
+@ApiBearerAuth('Bearer')
 @Controller('group')
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
@@ -32,7 +31,7 @@ export class GroupController {
   }
 
   @Get('group-details/:id')
-  findGroupWithMembers(@Param('id') id: string){
+  findGroupWithMembers(@Param('id') id: string) {
     return this.groupService.getGroupWithMembers(id);
   }
 

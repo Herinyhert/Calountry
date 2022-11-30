@@ -41,6 +41,11 @@ export class AuthController {
     return this.authService.findOne(term);
   }
 
+  @Get('users/groups/:id')
+  findGroupsByUser(@Param('id') id: string) {
+    return this.authService.getGroupsByUser(id);
+  }
+
   @Patch('users/:id')
   // @Auth()
   update(

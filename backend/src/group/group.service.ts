@@ -1,13 +1,7 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { Repository } from 'typeorm';
-import { User } from '../auth/entities/user.entity';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { Group } from './entities/group.entity';
@@ -37,11 +31,11 @@ export class GroupService {
     return groups;
   }
 
-  async getGroupWithMembers(id: string){
+  async getGroupWithMembers(id: string) {
     const group = await this.groupRepository.find({
       relations: ['users'],
-      where: {id: id}
-    })
+      where: { id: id },
+    });
     return group;
   }
 

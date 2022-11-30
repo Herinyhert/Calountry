@@ -4,7 +4,6 @@ import {
   BeforeUpdate,
   Column,
   Entity,
-  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -74,8 +73,7 @@ export class User {
   @OneToMany(() => Note, (userNote) => userNote.user)
   notes?: Note[];
 
-  @ManyToMany(() => Group)
-  @JoinTable()
+  @ManyToMany(() => Group, (group) => group.users)
   groups?: Group[];
 
   @BeforeInsert()
