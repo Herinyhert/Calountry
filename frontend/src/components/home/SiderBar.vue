@@ -6,13 +6,29 @@
     mini-variant
     mini-variant-width="80"
   >
-    <router-link to="/">
+    <router-link to="/home">
       <v-btn class="d-block text-center mx-auto mt-4 mb-16" size="40">
         <v-icon color="#529dff" x-large>fab fa-artstation</v-icon>
       </v-btn>
     </router-link>
     <v-list flat class="mt-16">
       <v-list-item-group v-model="selectedItem">
+        <router-link to="/home/admin">
+          <v-btn color="transparent">
+            <v-icon class="mb-5" color="white">fas fa-file-medical-alt</v-icon>
+          </v-btn>
+        </router-link>
+        <br />
+        <router-link to="/">
+          <v-btn color="transparent" style="margin-top: 20px">
+            <v-icon class="mb-5" color="white">fas fa-user-nurse</v-icon>
+          </v-btn>
+        </router-link>
+        <router-link to="/detail/:id">
+          <v-btn color="transparent" style="margin-top: 20px">
+            <v-icon class="mb-5" color="white">fas fa-virus</v-icon>
+          </v-btn>
+        </router-link>
         <v-list-item
           v-for="(item, i) in items"
           :key="i"
@@ -43,9 +59,6 @@ export default {
     selectedItem: 3,
     drawer: null,
     items: [
-      { icon: "fas fa-file-medical-alt", href: "/admin" },
-      { icon: "fas fa-user-nurse" },
-      { icon: "fas fa-virus" },
       { icon: "fas fa-user-md" },
       { icon: "fas fa-comment-medical" },
     ],

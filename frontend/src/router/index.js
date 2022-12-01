@@ -46,6 +46,40 @@ const routes = [
           },
         ],
       },
+      {
+        path: "/group/group-details/:id",
+        name: "groupDetail",
+
+        component: function () {
+          return import("../views/home/pages/GroupView.vue");
+        },
+        children: [
+          {
+            path: "",
+            name: "adminoptions",
+            meta: [ROLE.ADMIN],
+            component: function () {
+              return import("../views/home/pages/admin/AdminOptions.vue");
+            },
+          },
+          {
+            path: "groups",
+            name: "admingroup",
+            meta: [ROLE.ADMIN],
+            component: function () {
+              return import("../views/home/pages/admin/AdminGruop.vue");
+            },
+          },
+        ],
+      },
+      {
+        path: "/group/group-details/:id",
+        name: "groupDetail",
+
+        component: function () {
+          return import("../views/home/pages/GroupView.vue");
+        },
+      },
     ],
   },
 
