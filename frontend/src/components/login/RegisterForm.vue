@@ -6,7 +6,7 @@
           <v-col cols="12" sm="8" md="8">
             <v-card class="elevation-12">
               <v-row>
-                <v-col cols="12" md="4" class="teal accent-3">
+                <v-col cols="12" md="4" class="blue accent-3">
                   <v-card-text class="white--text me-12">
                     <h1 class="text-center display-1">Welcome Back!</h1>
                     <h5 class="text-center">
@@ -22,7 +22,7 @@
                 </v-col>
                 <v-col cols="12" md="8">
                   <v-card-text class="mt-12">
-                    <h1 class="text-center display-2 teal--text text--accent-3">
+                    <h1 class="text-center display-2 blue--text text--accent-3">
                       Create Account
                     </h1>
                     <div class="text-center mt-4">
@@ -75,13 +75,18 @@
                             v-model="password"
                             label="Password"
                             :type="showPass ? 'text' : 'password'"
+                            @blur="isValidpassword"
+                            @focus="errors.password.message = ''"
                             prepend-icon="lock"
+                            :error-messages="errors.password.message"
                           ></v-text-field>
                           <v-text-field
                             v-model="password_confirm"
                             label="Confirm Password"
                             :type="showPass ? 'text' : 'password'"
                             prepend-icon="lock"
+                            @focus="errors.password_confirm.message = ''"
+                            :error-messages="errors.password_confirm.message"
                           ></v-text-field>
                           <v-checkbox
                             v-model="showPass"
@@ -126,7 +131,7 @@
                   >
                     <v-btn
                       rounded
-                      color="teal accent-3"
+                      color="blue accent-3"
                       v-if="step > 1"
                       @click="step--"
                       dark
@@ -135,16 +140,16 @@
                     </v-btn>
                     <v-btn
                       rounded
-                      color="teal accent-3"
+                      color="blue accent-3"
                       v-if="step >= 1 && step != 3"
-                      @click="step++"
+                      @click="nextStep"
                       dark
                     >
                       <v-icon>arrow_forward</v-icon></v-btn
                     >
                     <v-btn
                       rounded
-                      color="teal accent-3"
+                      color="blue accent-3"
                       v-if="step == 3"
                       @click="handleSignUp"
                       dark
@@ -178,10 +183,21 @@ export default {
     gmt_zone: "",
     phone_number: "",
     technologies: "",
-    errors: [],
+    errors: {
+      password: {
+        value:
+          "The password must have a Uppercase, lowercase letter and a number'",
+        message: "",
+      },
+      password_confirm: {
+        value: "The passwords needs to be equals",
+        message: "",
+      },
+    },
   }),
   methods: {
     async handleSignUp() {
+      if (this.checkValidations() == false) return;
       try {
         await register(this.getUser());
         this.$emit("sigin");
@@ -200,6 +216,50 @@ export default {
         gmt_zone: this.gmt_zone,
         technologies: this.technologies,
       };
+    },
+    checkValidations() {
+      if (this.step == 1 && this.firsStepValidation() == false) return false;
+      if (this.step == 2 && this.secondStepValidation() == false) return false;
+      if (this.step == 3 && this.thirdStepValidation() == false) return false;
+      return true;
+    },
+    nextStep() {
+      if (this.checkValidations()) this.step++;
+    },
+    firsStepValidation() {
+      if (this.user_name.length < 3) return false;
+      if (this.name.length < 3) return false;
+      if (this.last_name.length < 3) return false;
+      return true;
+    },
+    secondStepValidation() {
+      let bol = true;
+      if (this.email.includes("@") == false) bol = false;
+      if (this.isValidpassword() == false) bol = false;
+
+      if (this.password !== this.password_confirm) {
+        this.errors.password_confirm.message =
+          this.errors.password_confirm.value;
+        bol = false;
+      }
+
+      return bol;
+    },
+
+    thirdStepValidation() {
+      if (this.country.length < 3) return false;
+      if (this.gmt_zone.length < 3) return false;
+      if (this.technologies.length < 3) return false;
+      return true;
+    },
+    isValidpassword() {
+      const regex = /(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
+      if (!(this.password.match(regex) || []).length) {
+        this.errors.password.message = this.errors.password.value;
+
+        return false;
+      }
+      return true;
     },
   },
 };

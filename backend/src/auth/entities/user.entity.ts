@@ -1,13 +1,17 @@
+import { Note } from '../../note/entities/note.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
+  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserRoles } from '../enums/user.roles';
+import { Group } from './../../group/entities/group.entity';
 
-@Entity('user')
+@Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -65,6 +69,12 @@ export class User {
     type: 'text',
   })
   technologies: string;
+
+  @OneToMany(() => Note, (userNote) => userNote.user)
+  notes?: Note[];
+
+  @ManyToMany(() => Group, (group) => group.users)
+  groups?: Group[];
 
   @BeforeInsert()
   checkFieldBeforeInsert() {

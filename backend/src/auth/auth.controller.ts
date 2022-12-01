@@ -6,13 +6,16 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
-  Put,
+  Patch,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/index';
 import { Auth } from './decorators';
 import { UserRoles } from './enums/user.roles';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Authentication and user management')
+@ApiBearerAuth('Bearer')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -27,6 +30,7 @@ export class AuthController {
     return this.authService.login(loginUserDto);
   }
 
+  // @Auth(UserRoles.Admin)
   @Get('users')
   findAll() {
     return this.authService.findAll();
@@ -37,8 +41,13 @@ export class AuthController {
     return this.authService.findOne(term);
   }
 
-  @Put('users/:id')
-  @Auth()
+  @Get('users/groups/:id')
+  findGroupsByUser(@Param('id') id: string) {
+    return this.authService.getGroupsByUser(id);
+  }
+
+  @Patch('users/:id')
+  // @Auth()
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateAuthDto: UpdateUserDto,
