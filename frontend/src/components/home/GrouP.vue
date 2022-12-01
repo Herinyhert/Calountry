@@ -8,7 +8,6 @@
       ></v-date-picker>
     </v-row>
     <v-toolbar color="transparent" flat class="mt-4">
-      <v-space></v-space>
       <v-avatar tile color="#ecf5ff">
         <v-icon color="#2784ff">fas fa-angle-up</v-icon>
       </v-avatar>

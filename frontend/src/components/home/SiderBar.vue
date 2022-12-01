@@ -19,23 +19,15 @@
           active-class="border"
           :ripple="false"
         >
-          <v-list-item-icon>
-            <v-icon v-text="item.icon" color="white"></v-icon>
-          </v-list-item-icon>
+          <div @click="goTo(item.href)">
+            <div class="d-flex justify-center">
+              <v-icon v-text="item.icon" color="white"></v-icon>
+            </div>
+          </div>
         </v-list-item>
       </v-list-item-group>
     </v-list>
-    <div
-      style="
-        position: absolute;
-        bottom: 20px;
-        margin-left: auto;
-        margin-right: auto;
-        left: 0;
-        right: 0;
-        text-align: center;
-      "
-    >
+    <div class="my-style">
       <v-icon class="mb-5" color="white">fas fa-cog</v-icon>
       <br />
       <v-icon color="white">fas fa-info-circle</v-icon>
@@ -44,18 +36,26 @@
 </template>
 
 <script>
+import { RouterLink } from "vue-router";
+
 export default {
   data: () => ({
     selectedItem: 3,
     drawer: null,
     items: [
-      { icon: "fas fa-file-medical-alt" },
+      { icon: "fas fa-file-medical-alt", href: "/admin" },
       { icon: "fas fa-user-nurse" },
       { icon: "fas fa-virus" },
       { icon: "fas fa-user-md" },
       { icon: "fas fa-comment-medical" },
     ],
   }),
+  methods: {
+    goTo(link) {
+      this.$router.push("/home" + link);
+    },
+  },
+  components: { RouterLink },
 };
 </script>
 
@@ -67,6 +67,17 @@ export default {
   border-radius: 50%;
   text-decoration: none;
 }
+
+.my-style {
+  position: absolute;
+  bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
 .v-list-item-group .v-list-item--active {
   color: white !important;
 }

@@ -8,3 +8,17 @@ export const getMyGroups = async () => {
     return [];
   }
 };
+
+export const createGroup = async (group) => {
+  const res = await httpInstance.post("group/create", group);
+  return res;
+};
+
+export const getAllGroups = async () => {
+  try {
+    const res = await httpInstance.get("group");
+    return res.data;
+  } catch (error) {
+    return [];
+  }
+};
