@@ -3,21 +3,26 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  ParseUUIDPipe,
+  Put,
 } from '@nestjs/common';
 import { NoteService } from './note.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
+import { Auth, GetUser } from 'src/auth/decorators';
+import { User } from 'src/auth/entities/user.entity';
+import { UserRoles } from 'src/auth/enums/user.roles';
 
 @Controller('note')
+@Auth(UserRoles.User)
 export class NoteController {
   constructor(private readonly noteService: NoteService) {}
 
-  @Post()
-  create(@Body() createNoteDto: CreateNoteDto) {
-    return this.noteService.create(createNoteDto);
+  @Post('create')
+  create(@Body() createNoteDto: CreateNoteDto, @GetUser() user: User) {
+    return this.noteService.create(createNoteDto, user);
   }
 
   @Get()
@@ -25,18 +30,22 @@ export class NoteController {
     return this.noteService.findAll();
   }
 
-  @Get(':id')
+  @Get('note-details/:id')
   findOne(@Param('id') id: string) {
-    return this.noteService.findOne(+id);
+    return this.noteService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNoteDto: UpdateNoteDto) {
-    return this.noteService.update(+id, updateNoteDto);
+  @Put(':id')
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateNoteDto: UpdateNoteDto,
+    user: User,
+  ) {
+    return this.noteService.update(id, updateNoteDto, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.noteService.remove(+id);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.noteService.remove(id);
   }
 }
