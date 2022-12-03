@@ -13,10 +13,9 @@ import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { Auth, GetUser } from 'src/auth/decorators';
 import { User } from 'src/auth/entities/user.entity';
-import { UserRoles } from 'src/auth/enums/user.roles';
 
 @Controller('note')
-@Auth(UserRoles.User)
+@Auth()
 export class NoteController {
   constructor(private readonly noteService: NoteService) {}
 
