@@ -8,7 +8,7 @@
 export default {
   name: "DetailNameGroup",
   props: {
-    detailGroup: { type: Array },
+    detailGroup: { type: Object },
   },
 };
 </script>

@@ -22,7 +22,7 @@ const routes = [
       },
       {
         path: "admin",
-        name: "admin",
+        name: "",
         meta: [ROLE.ADMIN],
         component: function () {
           return import("../views/home/pages/admin/AdminView.vue");
@@ -38,36 +38,18 @@ const routes = [
           },
           {
             path: "groups",
-            name: "admingroup",
+            name: "admingroups",
             meta: [ROLE.ADMIN],
             component: function () {
               return import("../views/home/pages/admin/AdminGruop.vue");
             },
           },
-        ],
-      },
-      {
-        path: "/group/group-details/:id",
-        name: "groupDetail",
-
-        component: function () {
-          return import("../views/home/pages/GroupView.vue");
-        },
-        children: [
           {
-            path: "",
-            name: "adminoptions",
-            meta: [ROLE.ADMIN],
-            component: function () {
-              return import("../views/home/pages/admin/AdminOptions.vue");
-            },
-          },
-          {
-            path: "groups",
+            path: "groups/:id",
             name: "admingroup",
             meta: [ROLE.ADMIN],
             component: function () {
-              return import("../views/home/pages/admin/AdminGruop.vue");
+              return import("../views/home/pages/admin/EditGroup.vue");
             },
           },
         ],
@@ -89,14 +71,6 @@ const routes = [
     meta: [],
     component: function () {
       return import("../views/LoginView.vue");
-    },
-  },
-  {
-    path: "/detail/:id",
-    name: "groupDetail",
-    meta: [],
-    component: function () {
-      return import("../components/groups/DetailGroup.vue");
     },
   },
 ];

@@ -1,8 +1,6 @@
 <template>
-  <v-expansion-panels style="width:20%">
-    <v-expansion-panel
-    v-for="user in this.users" :key="user.id"
-    >
+  <v-expansion-panels style="width: 20%">
+    <v-expansion-panel v-for="user in this.users" :key="user.id">
       <v-expansion-panel-header>
         <h1>{{ user.name }}</h1>
       </v-expansion-panel-header>

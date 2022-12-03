@@ -1,41 +1,38 @@
 <template>
-  <v-card width="400px">
+  <v-card>
     <form @submit.prevent="handleCreate" class="py-6 px-6">
-      <v-text-field v-model="name" label="Name" required></v-text-field>
-
       <v-text-field
-        v-model="start_date"
+        @input="(name) => this.$emit('name', name)"
+        :value="this.group.name"
+        label="Name"
+        required
+      ></v-text-field>
+      <v-text-field
+        @input="(date) => this.$emit('start:date', date)"
+        :value="this.group.start_date"
         label="Fecha de inicio"
         required
+        type="date"
       ></v-text-field>
-
       <v-text-field
-        v-model="end_date"
+        @input="(date) => this.$emit('end:date', date)"
+        :value="this.group.end_date"
         label="Fecha de fin"
         required
+        type="date"
       ></v-text-field>
-
-      <v-btn class="mr-4" type="submit"> submit </v-btn>
+      <slot name="footer"></slot>
+      <v-btn class="mr-4" @click="handleCreate"> submit </v-btn>
     </form>
   </v-card>
 </template>
 <script>
-import { createGroup } from "@/services/group/group";
-
 export default {
   name: "RegisterGroup",
-  data() {
-    return {
-      name: "string",
-      start_date: "2022-12-01T10:32:29.990Z",
-      end_date: "2022-12-01T10:32:29.990Z",
-      users: [],
-    };
-  },
+  props: ["group"],
   methods: {
     handleCreate() {
-      const { name, start_date, end_date, users } = this;
-      createGroup({ name, start_date, end_date, users }).then(console.log);
+      this.$emit("register:submit");
     },
   },
 };

@@ -2,9 +2,9 @@
   <div>
     <div class="d-flex align-center mx-5 mt-5">
       <p class="mx-2" v-for="route in items" :key="route?.name">
-        <RouterLink :class="this?.active" :to="route?.href">{{
-          route?.text
-        }}</RouterLink>
+        <RouterLink :class="this?.active" :to="route?.href">
+          {{ route?.text.length > 30 ? "edit" : route?.text }}
+        </RouterLink>
       </p>
     </div>
     <RouterView></RouterView>
@@ -12,10 +12,8 @@
 </template>
 
 <script>
-import { RouterLink } from "vue-router";
-
 export default {
-  name: "RegisterGroup",
+  name: "AdminView",
   data: () => ({
     items: [{ text: "", href: "" }],
     active: "active",
@@ -41,7 +39,6 @@ export default {
       return { text: x, disabled: false, href: acc };
     });
   },
-  components: { RouterLink },
 };
 </script>
 

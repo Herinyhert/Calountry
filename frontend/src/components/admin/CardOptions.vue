@@ -20,9 +20,6 @@ export default {
   name: "CardOption",
   props: ["ops"],
   components: { RouterLink },
-  created() {
-    console.log(this.$route);
-  },
 };
 </script>
 

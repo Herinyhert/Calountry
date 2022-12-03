@@ -8,7 +8,7 @@
       <v-icon x-samll color="#2784ff" class="ml-2 mr-2"
         >fas fa-caret-down</v-icon
       >
-      <v-btn color="#2784ff" class="withoutupercase">
+      <v-btn @click="handleAdd" color="#2784ff" class="withoutupercase">
         <v-icon left>fas fa-plus</v-icon> New group
       </v-btn>
     </div>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 import { ROLE } from "../../constants/index";
 export default {
   name: "NavBar",
@@ -37,6 +37,19 @@ export default {
   },
   computed: {
     ...mapState(["auth"]),
+  },
+  methods: {
+    ...mapMutations({
+      setTrue: "modals/setTrue",
+    }),
+
+    handleAdd() {
+      if (this.$route.path == "/home/admin/groups") this.setTrue();
+      else {
+        this.$router.push("/home/admin/groups");
+        this.setTrue();
+      }
+    },
   },
 };
 </script>
