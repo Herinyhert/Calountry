@@ -31,7 +31,6 @@
         class="ma-2"
         label="weekdays"
       ></v-select>
-      <v-space></v-space>
       <v-btn icon class="ma-2" @click="$refs.calendar.nextElementSibling()">
         <v-icon>mdi-chevron-right</v-icon>
       </v-btn>
