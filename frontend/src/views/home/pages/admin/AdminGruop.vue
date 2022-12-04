@@ -28,7 +28,6 @@
         </v-btn>
       </template>
     </v-data-table>
-
     <ModalRegister @success="handleSuccess"></ModalRegister>
     <ConfirmationModal
       :name="this.groupToDelete.name"
@@ -42,7 +41,6 @@ import ConfirmationModal from "@/components/common/ConfirmationModal.vue";
 import ModalRegister from "@/components/groups/ModalRegister.vue";
 import { deleteGroup, getAllGroups } from "@/services/group/group";
 import { mapMutations } from "vuex";
-
 export default {
   /* eslint-disable */
   name: "AdminGroup",
@@ -105,7 +103,6 @@ export default {
         this.setFalse();
         return;
       }
-
       deleteGroup(this.groupToDelete.id).then((res) => {
         if (!res.data) {
           this.isError = true;

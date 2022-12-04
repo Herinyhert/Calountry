@@ -54,7 +54,8 @@ export default {
       .substr(0, 10),
   }),
   mounted() {
-    getMyGroups(this.auth?.profile.id).then((res) => {
+    // console.log("te quiero ver",this.auth?.profile?.id);
+    getMyGroups(this.auth?.profile?.id).then((res) => {
       this.chats = res;
     });
   },

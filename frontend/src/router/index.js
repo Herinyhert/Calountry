@@ -45,6 +45,13 @@ const routes = [
             },
           },
           {
+            path: "users",
+            name: "adminuseres",
+            meta: [ROLE.ADMIN],
+            component: function () {
+              return import("../views/home/pages/admin/users/AdminUser.vue");
+            },
+          },          {
             path: "groups/:id",
             name: "admingroup",
             meta: [ROLE.ADMIN],
