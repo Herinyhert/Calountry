@@ -1,4 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { Repository } from 'typeorm';
@@ -8,6 +15,7 @@ import { Group } from './entities/group.entity';
 
 @Injectable()
 export class GroupService {
+  private readonly logger = new Logger('GroupService');
   constructor(
     @InjectRepository(Group)
     private readonly groupRepository: Repository<Group>,
@@ -16,14 +24,17 @@ export class GroupService {
   ) {}
 
   async create(createGroupDto: CreateGroupDto) {
-    const { users = [], ...rest } = createGroupDto;
-
-    const ids = await this.authService.findByIds(users);
-    const saveGroup = this.groupRepository.create({
-      ...rest,
-      users: ids,
-    });
-    return await this.groupRepository.save(saveGroup);
+    try {
+      const { users = [], ...rest } = createGroupDto;
+      const ids = await this.authService.findByIds(users);
+      const saveGroup = this.groupRepository.create({
+        ...rest,
+        users: ids,
+      });
+      return await this.groupRepository.save(saveGroup);
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
   async findAll() {
@@ -36,28 +47,54 @@ export class GroupService {
       relations: ['users'],
       where: { id: id },
     });
+    if (!group) {
+      throw new NotFoundException(`Group with id: ${id} not found`);
+    }
     return group;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} group`;
+  async findOne(id: string) {
+    const group = await this.groupRepository.findOneBy({ id });
+    if (!group) {
+      throw new NotFoundException(`Group with id: ${id} not found`);
+    }
+    return group;
   }
 
-  update(id: number, updateGroupDto: UpdateGroupDto) {
-    return `This action updates a #${id} group`;
+  async update(id: string, updateGroupDto: UpdateGroupDto) {
+    try {
+      const { users = [], ...rest } = updateGroupDto;
+      const ids = await this.authService.findByIds(users);
+      const group = await this.groupRepository.preload({
+        id,
+        ...rest,
+        users: ids,
+      });
+      await this.groupRepository.save(group);
+      return {
+        group,
+      };
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} group`;
+  async remove(id: string) {
+    const group = await this.findOne(id);
+    if (!group) {
+      throw new NotFoundException(`Group with id: ${id} not found`);
+    }
+    await this.groupRepository.remove(group);
+    return { message: `The group with id: ${id} was removed` };
   }
 
-  // private handleDBExceptions(error: any): never {
-  //   if (error.code === '23505') {
-  //     throw new BadRequestException(error.detail);
-  //   }
-  //   this.logger.error(error);
-  //   throw new InternalServerErrorException(
-  //     'Unexpected error, check server logs',
-  //   );
-  // }
+  private handleDBExceptions(error: any): never {
+    if (error.code === '23505') {
+      throw new BadRequestException(error.detail);
+    }
+    this.logger.error(error);
+    throw new InternalServerErrorException(
+      'Unexpected error, check server logs',
+    );
+  }
 }

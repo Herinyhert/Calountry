@@ -7,6 +7,7 @@ import {
   Delete,
   ParseUUIDPipe,
   Put,
+  HttpCode,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/index';
@@ -26,11 +27,11 @@ export class AuthController {
   }
 
   @Post('users/login')
+  @HttpCode(200)
   loginUser(@Body() loginUserDto: LoginUserDto) {
     return this.authService.login(loginUserDto);
   }
 
-  // @Auth(UserRoles.Admin)
   @Get('users')
   findAll() {
     return this.authService.findAll();
