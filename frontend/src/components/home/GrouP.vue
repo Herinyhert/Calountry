@@ -44,6 +44,7 @@
 
 <script>
 import { getMyGroups } from "@/services/group/group";
+import { mapState } from "vuex";
 
 export default {
   data: () => ({
@@ -52,16 +53,19 @@ export default {
       .toISOString()
       .substr(0, 10),
   }),
+  mounted() {
+    getMyGroups(this.auth?.profile.id).then((res) => {
+      this.chats = res;
+    });
+  },
+  computed: {
+    ...mapState(["auth"]),
+  },
   methods: {
     detail(id) {
       this.$router.push("group/group-details/" + id);
       console.log(id);
     },
-  },
-  mounted() {
-    getMyGroups().then((res) => {
-      this.chats = res;
-    });
   },
 };
 </script>

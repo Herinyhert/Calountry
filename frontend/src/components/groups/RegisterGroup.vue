@@ -22,14 +22,14 @@
         type="date"
       ></v-text-field>
       <slot name="footer"></slot>
-      <v-btn class="mr-4" @click="handleCreate"> submit </v-btn>
+      <v-btn class="mr-4" @click="handleCreate"> {{ btnText }} </v-btn>
     </form>
   </v-card>
 </template>
 <script>
 export default {
   name: "RegisterGroup",
-  props: ["group"],
+  props: ["group", "btnText"],
   methods: {
     handleCreate() {
       this.$emit("register:submit");

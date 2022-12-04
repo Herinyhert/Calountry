@@ -14,6 +14,7 @@
           start_date: this.start_date,
           end_date: this.end_date,
         }"
+        btn-text="Guardar"
         @start:date="(date) => (this.start_date = date)"
         @end:date="(date) => (this.end_date = date)"
         @name="(name) => (this.name = name)"
@@ -21,9 +22,9 @@
       >
         <template v-slot:footer>
           <v-alert dense text type="error" v-model="isError" class="alert"
-            ><strong>Error</strong>
+            ><strong>Can not be empty</strong>
           </v-alert>
-          <v-btn class="mr-4" @click="setFalse"> close </v-btn>
+          <v-btn class="mr-4" @click="setFalse"> Cerrar </v-btn>
         </template>
       </RegisterGroup>
     </v-dialog>

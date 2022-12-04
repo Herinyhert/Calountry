@@ -39,6 +39,7 @@
         start_date: this.group.start_date,
         end_date: this.group.end_date,
       }"
+      btn-text="Actualizar"
       @start:date="(date) => (this.group.start_date = date)"
       @end:date="(date) => (this.group.end_date = date)"
       @name="(name) => (this.group.name = name)"
@@ -48,6 +49,9 @@
         <v-alert dense text type="error" v-model="isError" class="alert"
           ><strong>Error</strong>
         </v-alert>
+        <v-alert dense text type="success" v-model="updatedOk" class="alert"
+          ><strong>Actualizado</strong>
+        </v-alert>
         <v-btn class="mr-4 red lighten-1 white--text"> delete </v-btn>
       </template>
     </RegisterGroup>
@@ -56,8 +60,9 @@
 
 <script>
 import RegisterGroup from "@/components/groups/RegisterGroup.vue";
-import { getDetailGroup } from "@/services/group/group";
+import { getDetailGroup, updateGroup } from "@/services/group/group";
 import { getUsers } from "@/services/user/user";
+
 export default {
   name: "EditGroup",
   data() {
@@ -65,6 +70,7 @@ export default {
       group: {},
       allUsers: [],
       isError: false,
+      updatedOk: false,
       headers: [
         {
           text: "Name",
@@ -87,9 +93,11 @@ export default {
       })
       .then(() => {
         getUsers().then((res) => {
-          this.allUsers = res.filter((x) =>
-            this.group.users.some((y) => x.id != y.id)
-          );
+          this.allUsers = res.filter((x) => {
+            return this.group.users.length
+              ? this.group.users.some((y) => x.id != y.id)
+              : true;
+          });
         });
       });
   },
@@ -105,8 +113,27 @@ export default {
     removeMember({ index }) {
       this.allUsers.push(this.group.users.splice(index, 1)[0]);
     },
-    handleSubmit() {
-      console.log("submit");
+    async handleSubmit() {
+      const group = { ...this.group };
+      group.users = this.toUpdate;
+      updateGroup(this.group.id, group).then((res) => {
+        console.log(res);
+        if (res.id == undefined) {
+          {
+            this.isError = true;
+            setTimeout(() => {
+              this.isError = false;
+            }, 1000);
+          }
+          return;
+        }
+
+        this.group = res;
+        this.updatedOk = true;
+        setTimeout(() => {
+          this.updatedOk = false;
+        }, 1000);
+      });
     },
   },
   components: { RegisterGroup },

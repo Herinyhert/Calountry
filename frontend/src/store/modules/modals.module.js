@@ -2,6 +2,7 @@ const modals = {
   namespaced: true,
   state: () => ({
     createGroupModal: false,
+    deleteGroupModal: false,
   }),
   getters: {},
   mutations: {
@@ -11,6 +12,13 @@ const modals = {
 
     setFalse(state) {
       state.createGroupModal = false;
+    },
+
+    setTrueDelete(state) {
+      state.deleteGroupModal = true;
+    },
+    setFalseDelete(state) {
+      state.deleteGroupModal = false;
     },
   },
   actions: {},

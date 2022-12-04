@@ -1,8 +1,8 @@
 import { httpInstance } from "../httpInstance";
 
-export const getMyGroups = async () => {
+export const getMyGroups = async (id) => {
   try {
-    const response = await httpInstance.get("group");
+    const response = await httpInstance.get("auth/users/groups/" + id);
     return response.data;
   } catch (error) {
     return [];
@@ -31,5 +31,25 @@ export const getAllGroups = async () => {
     return res.data;
   } catch (error) {
     return [];
+  }
+};
+
+export const updateGroup = async (id, group) => {
+  try {
+    delete group.created_at;
+    delete group.id;
+    const res = await httpInstance.put("group/" + id, group);
+    return res.data;
+  } catch (error) {
+    return {};
+  }
+};
+
+export const deleteGroup = async (id) => {
+  try {
+    const res = await httpInstance.delete("group/" + id);
+    return res
+  } catch (error) {
+    return {};
   }
 };
