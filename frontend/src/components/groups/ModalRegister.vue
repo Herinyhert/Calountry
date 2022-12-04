@@ -22,7 +22,7 @@
       >
         <template v-slot:footer>
           <v-alert dense text type="error" v-model="isError" class="alert"
-            ><strong>Can not be empty</strong>
+            ><strong>{{ errorMesage }}</strong>
           </v-alert>
           <v-btn class="mr-4" @click="setFalse"> Cerrar </v-btn>
         </template>
@@ -44,6 +44,7 @@ export default {
       end_date: "",
       users: [],
       isError: false,
+      errorMesage: "",
     };
   },
   computed: {
@@ -55,13 +56,21 @@ export default {
     }),
     async handleCreate() {
       const { name, start_date, end_date, users } = this;
+      if (this.areInputsEmpty()) {
+        this.errorMesage = "Can not be empty";
+        this.isError = true;
+        setTimeout(() => {
+          this.isError = false;
+        }, 1000);
+        return;
+      }
       try {
         await createGroup({ name, start_date, end_date, users });
         this.setFalse();
         this.cleanInputs();
-
         this.$emit("success");
       } catch (error) {
+        this.errorMesage = "Request Error";
         this.isError = true;
         setTimeout(() => {
           this.isError = false;
@@ -72,6 +81,11 @@ export default {
       const items = ["name", "start_date", "end_date"];
       for (const item of items) {
         this[item] = "";
+      }
+    },
+    areInputsEmpty() {
+      if (!this.name || !this.start_date || !this.end_date) {
+        return true;
       }
     },
   },

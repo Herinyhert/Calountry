@@ -60,6 +60,7 @@
 
 <script>
 import RegisterGroup from "@/components/groups/RegisterGroup.vue";
+
 import { getDetailGroup, updateGroup } from "@/services/group/group";
 import { getUsers } from "@/services/user/user";
 
@@ -117,8 +118,7 @@ export default {
       const group = { ...this.group };
       group.users = this.toUpdate;
       updateGroup(this.group.id, group).then((res) => {
-        console.log(res);
-        if (res.id == undefined) {
+        if (res.group == undefined) {
           {
             this.isError = true;
             setTimeout(() => {
@@ -128,8 +128,11 @@ export default {
           return;
         }
 
-        this.group = res;
+        res.group.end_date = res.group.end_date.split("T")[0];
+        res.group.start_date = res.group.start_date.split("T")[0];
+        this.group = res.group;
         this.updatedOk = true;
+
         setTimeout(() => {
           this.updatedOk = false;
         }, 1000);
