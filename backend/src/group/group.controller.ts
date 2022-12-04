@@ -35,20 +35,20 @@ export class GroupController {
     return this.groupService.getGroupWithMembers(id);
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.groupService.findOne(+id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.groupService.findOne(id);
+  }
 
   @Put(':id')
   @Auth(UserRoles.Admin)
   update(@Param('id') id: string, @Body() updateGroupDto: UpdateGroupDto) {
-    return this.groupService.update(+id, updateGroupDto);
+    return this.groupService.update(id, updateGroupDto);
   }
 
   @Delete(':id')
   @Auth(UserRoles.Admin)
   remove(@Param('id') id: string) {
-    return this.groupService.remove(+id);
+    return this.groupService.remove(id);
   }
 }

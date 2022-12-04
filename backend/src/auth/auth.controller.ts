@@ -6,7 +6,8 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
-  Patch,
+  Put,
+  HttpCode,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/index';
@@ -26,11 +27,11 @@ export class AuthController {
   }
 
   @Post('users/login')
+  @HttpCode(200)
   loginUser(@Body() loginUserDto: LoginUserDto) {
     return this.authService.login(loginUserDto);
   }
 
-  // @Auth(UserRoles.Admin)
   @Get('users')
   findAll() {
     return this.authService.findAll();
@@ -46,7 +47,7 @@ export class AuthController {
     return this.authService.getGroupsByUser(id);
   }
 
-  @Patch('users/:id')
+  @Put('users/:id')
   // @Auth()
   update(
     @Param('id', ParseUUIDPipe) id: string,
