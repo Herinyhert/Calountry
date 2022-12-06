@@ -37,11 +37,11 @@ export class NoteService {
     const notes = await this.noteRepository
       .createQueryBuilder('note')
       .leftJoin('note.user', 'user')
-      .addSelect(['user.id', 'user.user_name'])
+      // .addSelect(['user.id', 'user.user_name']) //
       .where('user.id = :id', {
         id: loggedUser.id,
       })
-      .cache(1500)
+      .cache(2500)
       .getMany();
     return notes;
   }
