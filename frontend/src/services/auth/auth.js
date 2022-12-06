@@ -20,7 +20,7 @@ export const login = async (user) => {
 
 export const getUserId = async (id) => {
   try {
-    const res = await httpInstance.get("http://localhost:3000/api/auth/users/" + id);
+    const res = await httpInstance.get("auth/users/" + id);
     return res.data;
   } catch (error) {
     return {};
