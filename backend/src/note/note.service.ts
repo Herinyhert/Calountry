@@ -33,8 +33,16 @@ export class NoteService {
     }
   }
 
-  async findAll() {
-    const notes = await this.noteRepository.find();
+  async findAll(loggedUser: User) {
+    const notes = await this.noteRepository
+      .createQueryBuilder('note')
+      .leftJoin('note.user', 'user')
+      // .addSelect(['user.id', 'user.user_name']) //
+      .where('user.id = :id', {
+        id: loggedUser.id,
+      })
+      .cache(2500)
+      .getMany();
     return notes;
   }
 

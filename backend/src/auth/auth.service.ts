@@ -26,7 +26,10 @@ export class AuthService {
   ) {}
 
   async findByIds(ids: Array<string>) {
-    return await this.userRepository.find({ where: { id: In(ids) } });
+    return await this.userRepository.find({
+      where: { id: In(ids) },
+      cache: 1500,
+    });
   }
 
   async create(createUserDto: CreateUserDto) {
@@ -78,7 +81,7 @@ export class AuthService {
   }
 
   async findAll() {
-    const users = await this.userRepository.find();
+    const users = await this.userRepository.find({ cache: 1500 });
     return users;
   }
 
