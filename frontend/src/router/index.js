@@ -52,6 +52,13 @@ const routes = [
               return import("../views/home/pages/admin/users/AdminUser.vue");
             },
           },          {
+            path: "users/:id",
+            name: "updateAdminUseres",
+            meta: [ROLE.ADMIN],
+            component: function () {
+              return import("../views/home/pages/admin/users/UpdateAdminUser.vue");
+            },
+          },         {
             path: "groups/:id",
             name: "admingroup",
             meta: [ROLE.ADMIN],
