@@ -96,7 +96,7 @@ export default {
         getUsers().then((res) => {
           this.allUsers = res.filter((x) => {
             return this.group.users.length
-              ? this.group.users.some((y) => x.id != y.id)
+              ? !this.group.users.some((y) => x.id == y.id)
               : true;
           });
         });

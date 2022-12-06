@@ -25,15 +25,18 @@ export default {
       isError: false,
       updatedOk: false,
       headers: [
+        {text:"User", value:"user_name"},
         {
           text: "Name",
           align: "start",
           sortable: false,
           value: "name",
         },
+        {text: "Apellido", value: "last_name"},
         { text: "País", value: "country" },
         { text: "Correo", value: "email" },
-        { text: "Tecnologia", value: "tecnology" },
+        {text:"Zona Horaria", value:"gmt_zone"},
+        { text: "Tecnologia", value: "technologies" },
       ],
       toUpdate: [],
     };
@@ -41,8 +44,13 @@ export default {
   created() {
       getUsers().then((res) => {
         this.allUsers = res;
-        console.log("quiero saber si estas aqui",this.allUsers);
+        console.log("quiero saber si estas aqui",this.allUsers.id);
         });
+  },
+  methods:{
+    handleRowClick(e) {
+      this.$router.push(this.$route.path + "/" + e.id);
+    },
   },
 };
 </script>
