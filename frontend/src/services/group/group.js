@@ -11,9 +11,7 @@ export const getMyGroups = async (id) => {
 
 export const getDetailGroup = async (id) => {
   try {
-    const resp = await httpInstance.get(
-      "http://localhost:3000/api/group/group-details/" + id
-    );
+    const resp = await httpInstance.get("group/group-details/"+ id);
     return resp.data;
   } catch (error) {
     return {};
