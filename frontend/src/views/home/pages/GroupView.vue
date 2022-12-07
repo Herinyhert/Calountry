@@ -1,18 +1,18 @@
 <template>
   <div>
-    <DetailNameGroup :detailGroup="this.detailGroup" />
-    <DetailGroup :users="this.detailGroup.users" />
+    <div class="d-flex">
+      <GroupCalendar :group="this.detailGroup" class="calendar"></GroupCalendar>
+    </div>
   </div>
 </template>
 
 <script>
-import DetailGroup from "@/components/groups/DetailGroup.vue";
-import DetailNameGroup from "@/components/groups/DetailNameGroup.vue";
+import GroupCalendar from "@/components/groups/GroupCalendar.vue";
 import { getDetailGroup } from "../../../services/group/group";
 
 export default {
   name: "GroupView",
-  components: { DetailGroup, DetailNameGroup },
+  components: { GroupCalendar },
   data() {
     return {
       groupId: null,
@@ -35,4 +35,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.calendar {
+  height: 100vh;
+}
+</style>

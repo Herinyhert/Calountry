@@ -3,6 +3,10 @@ const modals = {
   state: () => ({
     createGroupModal: false,
     deleteGroupModal: false,
+    eventModal: false,
+    eName: "",
+    eDescription: "",
+    eID: "",
   }),
   getters: {},
   mutations: {
@@ -19,6 +23,24 @@ const modals = {
     },
     setFalseDelete(state) {
       state.deleteGroupModal = false;
+    },
+
+    setEvent(state, value) {
+      state.eventModal = value;
+    },
+
+    setEventValues(state, payload) {
+      state.eDescription = payload.description;
+      state.eName = payload.name;
+      state.eID = payload.id;
+    },
+
+    setName(state, text) {
+      state.eName = text;
+    },
+
+    setDescription(state, text) {
+      state.eDescription = text;
     },
   },
   actions: {},
