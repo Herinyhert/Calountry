@@ -120,7 +120,6 @@ export default {
 
     async handdleSave(data) {
       if (data.action == "save") {
-        console.log(data, this.createEvent);
         this.createEvent.name = data.name;
         this.createEvent.description = data.description;
 
@@ -143,23 +142,18 @@ export default {
             end: new Date(x.end),
           }));
         });
+        this.setEventValues({ name: "", description: "", id: "" });
         return;
       }
     },
 
-    cickcc(prop) {
-      console.log(prop);
-    },
-    rigthClick(prop) {
-      console.log(prop);
-    },
+    cickcc() {},
+    rigthClick() {},
     clickEvent(prop) {
       if (!prop) return;
       this.textName = prop.event.name;
       this.textDesc = prop.event.description;
-      console.log(prop);
       this.delete = true;
-      console.log(this.textDesc, this.textName);
       this.setEventValues({
         name: prop.event.name,
         description: prop.event.description,
@@ -167,10 +161,9 @@ export default {
       });
       this.setEvent(true);
     },
-    deleteEvent(e, prop) {
+    deleteEvent(e) {
       e.canceluble = true;
       e.stopPropagation();
-      console.log({ e, prop });
     },
     //default
     startDrag({ event, timed }) {
@@ -211,13 +204,12 @@ export default {
       this.extendOriginal = event.end;
     },
 
-    endDrag(data, e) {
+    endDrag() {
       this.dragTime = null;
       this.dragEvent = null;
       this.createStart = null;
       this.extendOriginal = null;
 
-      console.log(data, e);
       this.setEvent(true);
     },
     cancelDrag() {
@@ -263,9 +255,7 @@ export default {
         ? `rgba(${r}, ${g}, ${b}, 0.7)`
         : event.color;
     },
-    getEvents(prop) {
-      console.log(prop);
-    },
+    getEvents() {},
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
     },

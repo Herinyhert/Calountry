@@ -95,9 +95,10 @@ export default {
       try {
         await deleteEvent(this.modals.eID);
         this.setEvent(false);
+        this.setEventValues({ name: "", description: "", id: "" });
         this.$emit("save:event", { action: "delete" });
       } catch (error) {
-        console.log(error);
+        this.$emit("save:event", { action: "delete" });
       }
     },
     handleSave() {
@@ -106,7 +107,7 @@ export default {
         description: this.eDescription,
         action: "save",
       });
-      this.setEventValues({ nam: "", description: "", id: "" });
+      this.setEventValues({ name: "", description: "", id: "" });
       this.setEvent(false);
     },
   },

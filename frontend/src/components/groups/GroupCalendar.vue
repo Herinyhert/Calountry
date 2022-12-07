@@ -91,20 +91,13 @@ export default {
     extendOriginal: null,
   }),
   methods: {
-    cickcc(prop) {
-      console.log(prop);
-    },
-    rigthClick(prop) {
-      console.log(prop);
-    },
+    cickcc() {},
+    rigthClick() {},
 
-    clickEvent(prop) {
-      console.log({ prop });
-    },
-    deleteEvent(e, prop) {
+    clickEvent() {},
+    deleteEvent(e) {
       e.canceluble = true;
       e.stopPropagation();
-      console.log({ e, prop });
     },
     //default
     startDrag({ event, timed }) {
@@ -214,8 +207,7 @@ export default {
         ? `rgba(${r}, ${g}, ${b}, 0.7)`
         : event.color;
     },
-    getEvents(prop) {
-      console.log(prop);
+    getEvents() {
       /*
       const min = new Date(`${start.date}T00:00:00`).getTime();
       const max = new Date(`${end.date}T23:59:59`).getTime();
