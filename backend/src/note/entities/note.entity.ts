@@ -13,13 +13,25 @@ export class Note {
   id: string;
 
   @Column('varchar')
-  title: string;
+  name: string;
 
   @Column('text')
   description: string;
 
   @CreateDateColumn()
   created_at: Date;
+
+  @Column()
+  start: Date;
+
+  @Column()
+  end: Date;
+
+  @Column()
+  color: string;
+
+  @Column()
+  timed: boolean;
 
   @ManyToOne(() => User, (userNote) => userNote.notes)
   user: User;

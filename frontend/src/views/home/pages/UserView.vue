@@ -7,7 +7,7 @@
             <ContacT />
           </v-col>
           <v-col cols="12" sm="12">
-            <AgendA />
+            <AgendA></AgendA>
           </v-col>
         </v-row>
       </v-col>
@@ -19,12 +19,13 @@
 </template>
 
 <script>
-import ContacT from "@/components/home/ContacT.vue";
 import AgendA from "@/components/home/AgendA.vue";
+import ContacT from "@/components/home/ContacT.vue";
 import GrouP from "@/components/home/GrouP.vue";
+
 export default {
   name: "UserView",
-  components: { ContacT, AgendA, GrouP },
+  components: { ContacT, GrouP, AgendA },
 };
 </script>
 

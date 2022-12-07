@@ -54,7 +54,6 @@ export default {
       .substr(0, 10),
   }),
   mounted() {
-    // console.log("te quiero ver",this.auth?.profile?.id);
     getMyGroups(this.auth?.profile?.id).then((res) => {
       this.chats = res;
     });
@@ -65,7 +64,6 @@ export default {
   methods: {
     detail(id) {
       this.$router.push("group/group-details/" + id);
-      console.log(id);
     },
   },
 };
