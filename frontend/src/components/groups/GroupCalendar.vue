@@ -21,7 +21,7 @@
           >
             <v-icon small> mdi-chevron-right </v-icon>
           </v-btn>
-          <p>Clandario del Equipo de:</p>
+          <p>Clandario del Equipo de: {{ this.group.name }}</p>
         </div>
         <v-calendar
           ref="calendar"
@@ -39,7 +39,8 @@
           @change="getEvents"
           @mousedown:event="startDrag"
           @mousedown:time="startTime"
-          @mouseup:time="(arg) => endDrag(arg, 'end')"
+          @mousemove:time="mouseMove"
+          @mouseup:time="endDrag"
           @mouseleave.native="cancelDrag"
           @click:event="clickEvent"
           @contextmenu:time="rigthClick"
@@ -61,17 +62,9 @@
         </v-calendar>
       </v-sheet>
     </v-col>
-    <EventInput
-      v-if="this.modals.eventModal"
-      :delete="this.delete"
-      @save:event="handdleSave"
-    ></EventInput>
   </v-row>
 </template>
 <script>
-import { mapMutations, mapState } from "vuex";
-import EventInput from "./EventInput.vue";
-import { getMyEvents, createEventFn } from "@/services/events/events";
 export default {
   props: {
     group: {
@@ -79,11 +72,7 @@ export default {
     },
   },
   data: () => ({
-    textName: "",
-    textDesc: "",
-    delete: false,
     value: "",
-    eventClicked: {},
     events: [],
     colors: [
       "#2196F3",
@@ -94,73 +83,18 @@ export default {
       "#FF9800",
       "#757575",
     ],
+
     dragEvent: null,
     dragStart: null,
     createEvent: null,
     createStart: null,
     extendOriginal: null,
   }),
-  created() {
-    getMyEvents().then((res) => {
-      this.events = res.map((x) => ({
-        ...x,
-        start: new Date(x.start),
-        end: new Date(x.end),
-      }));
-    });
-  },
-  computed: {
-    ...mapState(["auth", "modals"]),
-  },
   methods: {
-    ...mapMutations({
-      setEvent: "modals/setEvent",
-      setEventValues: "modals/setEventValues",
-    }),
-
-    async handdleSave(data) {
-      if (data.action == "save") {
-        this.createEvent.name = data.name;
-        this.createEvent.description = data.description;
-
-        const res = await createEventFn({
-          ...this.createEvent,
-          end: new Date(this.createEvent.end),
-          start: new Date(this.createEvent.start),
-        });
-        this.createEvent.id = res.id;
-        res && this.events.push({ ...this.createEvent });
-        this.clearCurretEvent();
-        return;
-      }
-
-      if (data.action == "delete") {
-        getMyEvents().then((res) => {
-          this.events = res.map((x) => ({
-            ...x,
-            start: new Date(x.start),
-            end: new Date(x.end),
-          }));
-        });
-        this.setEventValues({ name: "", description: "", id: "" });
-        return;
-      }
-    },
-
     cickcc() {},
     rigthClick() {},
-    clickEvent(prop) {
-      if (!prop) return;
-      this.textName = prop.event.name;
-      this.textDesc = prop.event.description;
-      this.delete = true;
-      this.setEventValues({
-        name: prop.event.name,
-        description: prop.event.description,
-        id: prop.event.id,
-      });
-      this.setEvent(true);
-    },
+
+    clickEvent() {},
     deleteEvent(e) {
       e.canceluble = true;
       e.stopPropagation();
@@ -175,42 +109,57 @@ export default {
     },
     startTime(tms) {
       const mouse = this.toTime(tms);
+
       if (this.dragEvent && this.dragTime === null) {
         const start = this.dragEvent.start;
+
         this.dragTime = mouse - start;
       } else {
         this.createStart = this.roundTime(mouse);
         this.createEvent = {
-          name: "",
+          name: `${this.group.name}`,
           color: this.rndElement(this.colors),
           start: this.createStart,
-          end: this.createStart + 60 * 1000 * 15,
+          end: this.createStart,
           timed: true,
         };
 
-        this.delete = false;
+        this.events.push(this.createEvent);
       }
-    },
-    clearCurretEvent() {
-      this.createEvent.name = "";
-      this.createEvent.color = "";
-      this.createEvent.start = "";
-      this.createEvent.end = "";
-      this.createEvent.description;
     },
     extendBottom(event) {
       this.createEvent = event;
       this.createStart = event.start;
       this.extendOriginal = event.end;
     },
+    mouseMove(tms) {
+      const mouse = this.toTime(tms);
 
+      if (this.dragEvent && this.dragTime !== null) {
+        const start = this.dragEvent.start;
+        const end = this.dragEvent.end;
+        const duration = end - start;
+        const newStartTime = mouse - this.dragTime;
+        const newStart = this.roundTime(newStartTime);
+        const newEnd = newStart + duration;
+
+        this.dragEvent.start = newStart;
+        this.dragEvent.end = newEnd;
+      } else if (this.createEvent && this.createStart !== null) {
+        const mouseRounded = this.roundTime(mouse, false);
+        const min = Math.min(mouseRounded, this.createStart);
+        const max = Math.max(mouseRounded, this.createStart);
+
+        this.createEvent.start = min;
+        this.createEvent.end = max;
+      }
+    },
     endDrag() {
       this.dragTime = null;
       this.dragEvent = null;
+      this.createEvent = null;
       this.createStart = null;
       this.extendOriginal = null;
-
-      this.setEvent(true);
     },
     cancelDrag() {
       if (this.createEvent) {
@@ -224,6 +173,7 @@ export default {
         }
       }
 
+      this.createEvent = null;
       this.createStart = null;
       this.dragTime = null;
       this.dragEvent = null;
@@ -231,6 +181,7 @@ export default {
     roundTime(time, down = true) {
       const roundTo = 30; // minutes
       const roundDownTime = roundTo * 60 * 1000;
+
       return down
         ? time - (time % roundDownTime)
         : time + (roundDownTime - (time % roundDownTime));
@@ -246,16 +197,37 @@ export default {
     },
     getEventColor(event) {
       const rgb = parseInt(event.color.substring(1), 16);
-      const r = (rgb >> 16) & 255;
-      const g = (rgb >> 8) & 255;
-      const b = (rgb >> 0) & 255;
+      const r = (rgb >> 16) & 0xff;
+      const g = (rgb >> 8) & 0xff;
+      const b = (rgb >> 0) & 0xff;
+
       return event === this.dragEvent
         ? `rgba(${r}, ${g}, ${b}, 0.7)`
         : event === this.createEvent
         ? `rgba(${r}, ${g}, ${b}, 0.7)`
         : event.color;
     },
-    getEvents() {},
+    getEvents() {
+      /*
+      const min = new Date(`${start.date}T00:00:00`).getTime();
+      const max = new Date(`${end.date}T23:59:59`).getTime();
+      //const days = (max - min) / 86400000;
+
+      const timed = this.rnd(0, 3) !== 0;
+      const firstTimestamp = this.rnd(min, max);
+      const secondTimestamp = this.rnd(2, timed ? 8 : 288) * 900000;
+      start = firstTimestamp - (firstTimestamp % 900000);
+      end = start + secondTimestamp;
+
+      events.push({
+        name: this.rndElement(this.names),
+        color: this.rndElement(this.colors),
+        start,
+        end,
+        timed,
+      });
+*/
+    },
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
     },
@@ -263,7 +235,6 @@ export default {
       return arr[this.rnd(0, arr.length - 1)];
     },
   },
-  components: { EventInput },
 };
 </script>
 

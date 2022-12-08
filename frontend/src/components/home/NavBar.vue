@@ -1,14 +1,14 @@
 <template>
   <v-app-bar color="white" app dark flat>
     <!-- <v-icon color="black">fas fa-long-arrow-alt-left</v-icon> -->
-    <h4 class="black--text ml-3">Calountry</h4>
+    <h1 class="black--text ml-3">Calountry</h1>
     <v-spacer></v-spacer>
     <div v-if="auth.profile?.role == 'Admin'" class="d-flex align-center">
       <h4 class="blue--text text--linghten-2">Group history</h4>
       <v-icon x-samll color="#2784ff" class="ml-2 mr-2"
         >fas fa-caret-down</v-icon
       >
-      <v-btn color="#2784ff" class="withoutupercase">
+      <v-btn @click="handleAdd" color="#2784ff" class="withoutupercase">
         <v-icon left>fas fa-plus</v-icon> New group
       </v-btn>
     </div>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 import { ROLE } from "../../constants/index";
 export default {
   name: "NavBar",
@@ -37,6 +37,19 @@ export default {
   },
   computed: {
     ...mapState(["auth"]),
+  },
+  methods: {
+    ...mapMutations({
+      setTrue: "modals/setTrue",
+    }),
+
+    handleAdd() {
+      if (this.$route.path == "/home/admin/groups") this.setTrue();
+      else {
+        this.$router.push("/home/admin/groups");
+        this.setTrue();
+      }
+    },
   },
 };
 </script>

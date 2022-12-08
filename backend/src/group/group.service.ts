@@ -42,7 +42,7 @@ export class GroupService {
   }
 
   async findAll() {
-    const groups = await this.groupRepository.find();
+    const groups = await this.groupRepository.find({cache: 1500});
     return groups;
   }
 
@@ -50,6 +50,7 @@ export class GroupService {
     const group = await this.groupRepository.find({
       relations: ['users'],
       where: { id: id },
+      cache: 1500
     });
     if (!group) {
       throw new NotFoundException(`Group with id: ${id} not found`);

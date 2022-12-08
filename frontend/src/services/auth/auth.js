@@ -17,3 +17,12 @@ export const login = async (user) => {
     return error;
   }
 };
+
+export const getUserId = async (id) => {
+  try {
+    const res = await httpInstance.get("auth/users/" + id);
+    return res.data;
+  } catch (error) {
+    return {};
+  }
+};
