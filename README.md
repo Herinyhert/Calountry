@@ -14,7 +14,7 @@
 - Vue 2
 - Vuetify 2
 
-#### Herramientas
+#### Tools
 
 - Vuex
 - VueRoute
@@ -73,7 +73,7 @@ Use the formatDate helper to create a global filter to format the displayed date
 
 - <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a>
 
-### Herramientas opcionales:
+### Optional tools:
 
 - <a href="https://www.docker.com/" target="_blank">Docker</a>
 - <a href="https://tableplus.com/" target="_blank">TablePlus</a>
@@ -93,12 +93,12 @@ Use the formatDate helper to create a global filter to format the displayed date
 
 6. Install packages and dependencies ```npm i```
 
-7. Levantar la base de datos
+7. Raise the database
 ```
 docker-compose up -d
 ```
 
-8. Levantar el servidor en modo desarrollo:
+8. Raise the server in development mode:
  ```
  npm run start:dev
  ```
