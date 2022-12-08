@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
+import { User } from 'src/auth/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -31,7 +32,10 @@ export class GroupService {
         ...rest,
         users: ids,
       });
-      return await this.groupRepository.save(saveGroup);
+      await this.groupRepository.save(saveGroup);
+      return {
+        saveGroup,
+      };
     } catch (error) {
       this.handleDBExceptions(error);
     }
