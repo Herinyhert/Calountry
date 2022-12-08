@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Name:{{ this.detailGroup.name }}</h2>
+    <h2 style="margin-left:50%;color:#2784ff">Grupo:  {{ this.detailGroup.name }}</h2>
   </div>
 </template>
 
