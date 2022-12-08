@@ -89,7 +89,7 @@ Use the formatDate helper to create a global filter to format the displayed date
 
 4. Change environment variables
 
-5. The ORM configured in the project is ```TypeOrm```, the database configured in the ```docker-compose.yaml``` es ```PstgreSQL``` and the GUI is ```TablePlus```
+5. The ORM configured in the project is ```TypeOrm```, the database configured in the ```docker-compose.yaml``` es ```PostgreSQL``` and the GUI is ```TablePlus```
 
 6. Install packages and dependencies ```npm i```
 
