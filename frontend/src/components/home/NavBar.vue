@@ -1,7 +1,7 @@
 <template>
   <v-app-bar color="white" app dark flat>
     <!-- <v-icon color="black">fas fa-long-arrow-alt-left</v-icon> -->
-    <h1 class="black--text ml-3">Calountry</h1>
+    <h1 style="color:#2784ff">Calountry</h1>
     <v-spacer></v-spacer>
     <div v-if="auth.profile?.role == 'Admin'" class="d-flex align-center">
       <h4 class="blue--text text--linghten-2">Group history</h4>

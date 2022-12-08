@@ -8,51 +8,31 @@
   >
     <router-link to="/home">
       <v-btn class="d-block text-center mx-auto mt-4 mb-16" size="40">
-        <v-icon color="#529dff" x-large>fab fa-artstation</v-icon>
+        <v-icon color="#529dff" x-large>fa-thin fa-shekel-sign</v-icon>
       </v-btn>
     </router-link>
     <v-list flat class="mt-16">
       <v-list-item-group v-model="selectedItem">
-        <router-link to="/home/admin">
+        <router-link v-if="auth.profile?.role == 'Admin'" to="/home/admin">
           <v-btn color="transparent">
-            <v-icon class="mb-5" color="white">fas fa-file-medical-alt</v-icon>
+            <v-icon class="mb-5" color="white">fa-solid fa-lock</v-icon>
           </v-btn>
         </router-link>
         <br />
         <router-link to="/">
           <v-btn color="transparent" style="margin-top: 20px">
-            <v-icon class="mb-5" color="white">fas fa-user-nurse</v-icon>
+            <v-icon class="mb-5" color="white">fa-solid fa-user</v-icon>
+            <i class=""></i>
           </v-btn>
         </router-link>
-        <router-link to="/detail/:id">
-          <v-btn color="transparent" style="margin-top: 20px">
-            <v-icon class="mb-5" color="white">fas fa-virus</v-icon>
-          </v-btn>
-        </router-link>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          active-class="border"
-          :ripple="false"
-        >
-          <div @click="goTo(item.href)">
-            <div class="d-flex justify-center">
-              <v-icon v-text="item.icon" color="white"></v-icon>
-            </div>
-          </div>
-        </v-list-item>
       </v-list-item-group>
     </v-list>
-    <div class="my-style">
-      <v-icon class="mb-5" color="white">fas fa-cog</v-icon>
-      <br />
-      <v-icon color="white">fas fa-info-circle</v-icon>
-    </div>
   </v-navigation-drawer>
 </template>
 
 <script>
 import { RouterLink } from "vue-router";
+import { mapState } from "vuex";
 
 export default {
   data: () => ({
@@ -63,6 +43,9 @@ export default {
       { icon: "fas fa-comment-medical" },
     ],
   }),
+  computed:{
+    ...mapState(["auth"])
+  },
   methods: {
     goTo(link) {
       this.$router.push("/home" + link);

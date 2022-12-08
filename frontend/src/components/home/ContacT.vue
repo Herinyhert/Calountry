@@ -6,8 +6,7 @@
           <v-row>
             <v-col cols="12" sm="4">
               <v-avatar color="#dfedff" tile>
-                <v-img src="" />
-                <!-- aqui podemos mostrar una imagen para el usuario-->
+                <v-icon color="#529dff" x-large>fa-thin fa-user-tie</v-icon>
               </v-avatar>
             </v-col>
             <v-col cols="12" sm="8">
