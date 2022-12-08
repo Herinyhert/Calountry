@@ -1,8 +1,13 @@
 # C8-39-T-Vue
 
-Proyecto realizado en Vue 2 y nest.js para apoyo y organización de horarios en semana cero en No-Countryi
+<p align="center">
+  <a href="https://commons.wikimedia.org/" target="blank"><img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg" width="200" alt="Nest Logo" /></a>
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+</p>
+<p align="center">Project carried out with <a href="https://v2.vuejs.org/" target="_blank">Vue2.js</a> and <a href="https://nestjs.com/" target="_blank">Nest.js</a> for support and organization of schedules in week zero of No-Country.</p>
 
-#Frontend Doc:
+
+# Front-end Doc:
 
 ## Frameworks
 
@@ -21,13 +26,9 @@ Proyecto realizado en Vue 2 y nest.js para apoyo y organización de horarios en 
   - auth
   - modals
 
-- Agregar un modulo
+- Add a module
 
-  - crear archivo `name.module.js` dentro de la crpeta `store/modules`
-
-```js
-
-```
+  - Create file `name.module.js` inside the folder `store/modules.js`
 
 ## Helpers:
 
@@ -37,7 +38,7 @@ Proyecto realizado en Vue 2 y nest.js para apoyo y organización de horarios en 
 
      date
 
-Utiliza el helper formatDate para crear un filtro global para formatear las fechas mostradas.
+Use the formatDate helper to create a global filter to format the displayed dates.
 
 ```html
 <p>{{this.date.date | date}}</p>
@@ -45,11 +46,12 @@ Utiliza el helper formatDate para crear un filtro global para formatear las fech
 
 # Services
 
-- peticiones Http-
+- requests Http-
 
 # Run
 
 - npm i
 - npm run serve
+
 
 <a href="https://calountry-backend-production.up.railway.app/api" target="_blank">Back-End</a>
